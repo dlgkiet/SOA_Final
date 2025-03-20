@@ -1,0 +1,38 @@
+## Ignore Visual Studio specific files
+.vs/
+.vscode/
+*.user
+*.suo
+*.log
+
+## Ignore build output directories
+bin/
+obj/
+
+## Ignore NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+## Ignore user secrets (for security)
+**/appsettings.Development.json
+**/secrets.json
+
+## Ignore logs and debug files
+*.log
+logs/
+
+## Ignore Entity Framework Migrations (optional, if you don't want to track migrations)
+Migrations/
+
+## Ignore compiled files
+*.dll
+*.exe
+*.pdb
+*.mdb
+
+## Ignore Rider/JetBrains IDE settings
+.idea/
+
+## Ignore ReSharper settings
+*.DotSettings.user
