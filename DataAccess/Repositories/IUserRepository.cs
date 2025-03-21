@@ -13,5 +13,7 @@ namespace DataAccess.Repositories
         Task<Student> CreateStudentAsync(Student student);
         Task<Teacher> GetTeacherByIdAsync(int id);
         Task<Student> GetStudentByIdAsync(int id);
+        Task<IEnumerable<Teacher>> GetAllTeachersAsync();
+        Task<IEnumerable<Student>> GetAllStudentsAsync();
     }
 }

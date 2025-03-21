@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Entities;
 using DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -39,6 +40,16 @@ namespace DataAccess.Repositories
         public async Task<Student> GetStudentByIdAsync(int id)
         {
             return await _context.Students.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Teacher>> GetAllTeachersAsync()
+        {
+            return await _context.Teachers.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Student>> GetAllStudentsAsync()
+        {
+            return await _context.Students.ToListAsync();
         }
     }
 }

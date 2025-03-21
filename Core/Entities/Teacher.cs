@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
+    [Table("teachers")]  // Chỉ định tên bảng trong cơ sở dữ liệu
     public class Teacher
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime Birthday { get; set; }

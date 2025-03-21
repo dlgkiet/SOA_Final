@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities
 {
+    [Table("students")]  // Chỉ định tên bảng trong cơ sở dữ liệu
     public class Student
     {
         public int Id { get; set; }

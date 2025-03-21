@@ -26,5 +26,25 @@ namespace Service.Services
         {
             return await _userRepository.CreateStudentAsync(student);
         }
+
+        public async Task<IEnumerable<Teacher>> GetAllTeachersAsync()
+        {
+            return await _userRepository.GetAllTeachersAsync();
+        }
+
+        public async Task<IEnumerable<Student>> GetAllStudentsAsync()
+        {
+            return await _userRepository.GetAllStudentsAsync();
+        }
+
+        public async Task<Teacher> GetTeacherByIdAsync(int id)
+        {
+            return await _userRepository.GetTeacherByIdAsync(id);
+        }
+
+        public async Task<Student> GetStudentByIdAsync(int id)
+        {
+            return await _userRepository.GetStudentByIdAsync(id);
+        }
     }
 }

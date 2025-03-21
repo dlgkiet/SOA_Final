@@ -11,5 +11,10 @@ namespace Service.Services
     {
         Task<Teacher> RegisterTeacherAsync(Teacher teacher);
         Task<Student> RegisterStudentAsync(Student student);
+
+        Task<IEnumerable<Teacher>> GetAllTeachersAsync();
+        Task<IEnumerable<Student>> GetAllStudentsAsync();
+        Task<Teacher> GetTeacherByIdAsync(int id);
+        Task<Student> GetStudentByIdAsync(int id);
     }
 }

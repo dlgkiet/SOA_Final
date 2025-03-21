@@ -4,7 +4,6 @@ using Service.Services;
 
 namespace API.Controllers
 {
-    // UserController.cs
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -16,7 +15,7 @@ namespace API.Controllers
             _userService = userService;
         }
 
-        // Register Teacher
+        // Đăng ký Teacher
         [HttpPost("register/teacher")]
         public async Task<IActionResult> RegisterTeacher([FromBody] Teacher teacher)
         {
@@ -29,7 +28,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(RegisterTeacher), new { id = createdTeacher.Id }, createdTeacher);
         }
 
-        // Register Student
+        // Đăng ký Student
         [HttpPost("register/student")]
         public async Task<IActionResult> RegisterStudent([FromBody] Student student)
         {
@@ -41,5 +40,46 @@ namespace API.Controllers
             var createdStudent = await _userService.RegisterStudentAsync(student);
             return CreatedAtAction(nameof(RegisterStudent), new { id = createdStudent.Id }, createdStudent);
         }
+
+        // Lấy tất cả Teacher
+        [HttpGet("teachers")]
+        public async Task<IActionResult> GetAllTeachers()
+        {
+            var teachers = await _userService.GetAllTeachersAsync();
+            return Ok(teachers);
+        }
+
+        // Lấy tất cả Student
+        [HttpGet("students")]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            var students = await _userService.GetAllStudentsAsync();
+            return Ok(students);
+        }
+
+        // Lấy Teacher theo ID
+        [HttpGet("teacher/{id}")]
+        public async Task<IActionResult> GetTeacherById(int id)
+        {
+            var teacher = await _userService.GetTeacherByIdAsync(id);
+            if (teacher == null)
+            {
+                return NotFound($"Teacher with ID {id} not found.");
+            }
+            return Ok(teacher);
+        }
+
+        // Lấy Student theo ID
+        [HttpGet("student/{id}")]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            var student = await _userService.GetStudentByIdAsync(id);
+            if (student == null)
+            {
+                return NotFound($"Student with ID {id} not found.");
+            }
+            return Ok(student);
+        }
     }
+
 }
