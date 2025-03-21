@@ -15,5 +15,10 @@ namespace DataAccess.Repositories
         Task<Student> GetStudentByIdAsync(int id);
         Task<IEnumerable<Teacher>> GetAllTeachersAsync();
         Task<IEnumerable<Student>> GetAllStudentsAsync();
+
+        Task<bool> UpdatePasswordAsync(int id, string newPassword);
+        Task<bool> UpdatePersonalInfoAsync(int id, string name, DateTime birthday, string email, int classId);
+
+
     }
 }

@@ -51,5 +51,53 @@ namespace DataAccess.Repositories
         {
             return await _context.Students.ToListAsync();
         }
+
+        // Cập nhật password
+        public async Task<bool> UpdatePasswordAsync(int id, string newPassword)
+        {
+            var user = await _context.Teachers.FindAsync(id) ?? (object)await _context.Students.FindAsync(id);
+            if (user != null)
+            {
+                if (user is Teacher teacher)
+                {
+                    teacher.Password = newPassword;
+                }
+                else if (user is Student student)
+                {
+                    student.Password = newPassword;
+                }
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        // Cập nhật thông tin cá nhân (không bao gồm password)
+        public async Task<bool> UpdatePersonalInfoAsync(int id, string name, DateTime birthday, string email, int classId)
+        {
+            var user = await _context.Teachers.FindAsync(id) ?? (object)await _context.Students.FindAsync(id);
+            if (user != null)
+            {
+                if (user is Teacher teacher)
+                {
+                    teacher.Name = name;
+                    teacher.Birthday = birthday;
+                    teacher.Email = email;
+                    teacher.ClassId = classId;
+                }
+                else if (user is Student student)
+                {
+                    student.Name = name;
+                    student.Birthday = birthday;
+                    student.Email = email;
+                    student.ClassId = classId;
+                }
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

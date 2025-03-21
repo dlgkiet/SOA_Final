@@ -80,6 +80,40 @@ namespace API.Controllers
             }
             return Ok(student);
         }
+
+        // Cập nhật password
+        [HttpPut("update/password/{id}")]
+        public async Task<IActionResult> UpdatePassword(int id, [FromBody] string newPassword)
+        {
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                return BadRequest("Password is required");
+            }
+
+            var result = await _userService.UpdatePasswordAsync(id, newPassword);
+            if (result)
+            {
+                return Ok("Password updated successfully");
+            }
+            return NotFound($"User with ID {id} not found");
+        }
+
+        // Cập nhật thông tin cá nhân (không bao gồm password)
+        [HttpPut("update/personal-info/{id}")]
+        public async Task<IActionResult> UpdatePersonalInfo(int id, [FromBody] UpdatePersonalInfoDto dto)
+        {
+            if (dto == null)
+            {
+                return BadRequest("Personal info data is required");
+            }
+
+            var result = await _userService.UpdatePersonalInfoAsync(id, dto.Name, dto.Birthday, dto.Email, dto.ClassId);
+            if (result)
+            {
+                return Ok("Personal info updated successfully");
+            }
+            return NotFound($"User with ID {id} not found");
+        }
     }
 
 }

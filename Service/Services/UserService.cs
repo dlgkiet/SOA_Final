@@ -46,5 +46,16 @@ namespace Service.Services
         {
             return await _userRepository.GetStudentByIdAsync(id);
         }
+        // Cập nhật password
+        public async Task<bool> UpdatePasswordAsync(int id, string newPassword)
+        {
+            return await _userRepository.UpdatePasswordAsync(id, newPassword);
+        }
+
+        // Cập nhật thông tin cá nhân (không bao gồm password)
+        public async Task<bool> UpdatePersonalInfoAsync(int id, string name, DateTime birthday, string email, int classId)
+        {
+            return await _userRepository.UpdatePersonalInfoAsync(id, name, birthday, email, classId);
+        }
     }
 }

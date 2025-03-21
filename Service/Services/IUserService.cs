@@ -16,5 +16,7 @@ namespace Service.Services
         Task<IEnumerable<Student>> GetAllStudentsAsync();
         Task<Teacher> GetTeacherByIdAsync(int id);
         Task<Student> GetStudentByIdAsync(int id);
+        Task<bool> UpdatePasswordAsync(int id, string newPassword);
+        Task<bool> UpdatePersonalInfoAsync(int id, string name, DateTime birthday, string email, int classId);
     }
 }
