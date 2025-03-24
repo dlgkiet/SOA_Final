@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
-using DataAccess.Repositories;
+using DataAccess.IReposiories;
+using Service.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;

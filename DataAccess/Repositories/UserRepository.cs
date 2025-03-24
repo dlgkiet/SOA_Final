@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Entities;
 using DataAccess.Context;
+using DataAccess.IReposiories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories

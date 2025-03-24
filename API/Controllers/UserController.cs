@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services;
+using Service.IServices;
 
 namespace API.Controllers
 {

@@ -1,6 +1,8 @@
 ﻿using DataAccess.Context;
+using DataAccess.IReposiories;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Service.IServices;
 using Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
