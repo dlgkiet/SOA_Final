@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using DataAccess.Context;
 using DataAccess.IReposiories;
 
 
@@ -8,9 +9,9 @@ namespace DataAccess.Repositories
 {
     public class AnswerRepository : IAnswerRepository
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AnswerRepository(DbContext context)
+        public AnswerRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -30,11 +31,6 @@ namespace DataAccess.Repositories
             return await _context.Set<Answer>().Where(a => a.TestId == testId).ToListAsync();
         }
 
-        public async Task AddAsync(Answer answer)
-        {
-            await _context.Set<Answer>().AddAsync(answer);
-            await _context.SaveChangesAsync();
-        }
 
         public async Task UpdateAsync(Answer answer)
         {
@@ -50,6 +46,27 @@ namespace DataAccess.Repositories
                 _context.Set<Answer>().Remove(answer);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task SubmitAnswersAsync(SubmitAnswerDto dto)
+        {
+            foreach (var item in dto.SelectedAnswers)
+            {
+                var question = await _context.Questions.FindAsync(item.QuestionId);
+
+                var answer = new Answer
+                {
+                    TestId = dto.TestId,
+                    QuestionId = item.QuestionId,
+                    StudentId = dto.StudentId,
+                    SelectedAnswer = item.SelectedAnswer,
+                    IsCorrect = question != null && question.CorrectAnswer == item.SelectedAnswer
+                };
+
+                _context.Answers.Add(answer);
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

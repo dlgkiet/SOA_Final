@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using DataAccess.IReposiories;
+using Microsoft.EntityFrameworkCore;
 using Service.IServices;
 
 namespace Service.Services
@@ -19,10 +20,14 @@ namespace Service.Services
 
         public async Task<IEnumerable<Answer>> GetAnswersByTestIdAsync(int testId) => await _answerRepository.GetAnswersByTestIdAsync(testId);
 
-        public async Task AddAsync(Answer answer) => await _answerRepository.AddAsync(answer);
 
         public async Task UpdateAsync(Answer answer) => await _answerRepository.UpdateAsync(answer);
 
         public async Task DeleteAsync(int id) => await _answerRepository.DeleteAsync(id);
+
+        public async Task SubmitAnswersAsync(SubmitAnswerDto dto)
+        {
+            await _answerRepository.SubmitAnswersAsync(dto);
+        }
     }
 }

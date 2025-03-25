@@ -13,8 +13,11 @@ namespace Core.Entities
         [Column("test_id")]
         public int TestId { get; set; }
 
+        [Column("teacher_id")]
+        public int TeacherId { get; set; } // ✅ Thêm dòng này
+
         [Column("content")]
-        public string Content { get; set; } // Nội dung câu hỏi
+        public string Content { get; set; }
 
         [Column("option_a")]
         public string OptionA { get; set; }
@@ -29,9 +32,11 @@ namespace Core.Entities
         public string OptionD { get; set; }
 
         [Column("correct_answer")]
-        public string CorrectAnswer { get; set; } // Đáp án đúng (A/B/C/D)
+        public string CorrectAnswer { get; set; }
 
-        [ForeignKey("TestId")]
-        public Test Test { get; set; }
+        // Optional: Có thể thêm navigation đến Teacher nếu có entity Teacher
+        // [ForeignKey("TeacherId")]
+        // public Teacher Teacher { get; set; }
     }
+
 }

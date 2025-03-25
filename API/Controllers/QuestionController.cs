@@ -3,7 +3,7 @@ using Core.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
