@@ -1,45 +1,78 @@
-﻿using Core.Entities;
+using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Service.IServices;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CourseController : ControllerBase
+
+[Route("api/courses")]
+[ApiController]
+public class CourseController : ControllerBase
+{
+    private readonly ICourseService _courseService;
+
+    public CourseController(ICourseService courseService)
     {
-        private readonly ICourseService _courseService;
-
-        public CourseController(ICourseService courseService)
-        {
-            _courseService = courseService;
-        }
-
-        [HttpPost("enroll")]
-        public async Task<IActionResult> EnrollStudent([FromBody] EnrollmentDto enrollmentDto)
-        {
-            if (enrollmentDto == null)
-                return BadRequest("Invalid data");
-
-            var result = await _courseService.EnrollStudentAsync(enrollmentDto.StudentId, enrollmentDto.CourseId);
-            if (!result)
-                return BadRequest("Enrollment failed");
-
-            return Ok("Student enrolled successfully");
-        }
-
-        [HttpGet("courses")]
-        public async Task<IActionResult> GetCourses()
-        {
-            var courses = await _courseService.GetCoursesAsync();
-            return Ok(courses);
-        }
+        _courseService = courseService;
     }
 
-    public class EnrollmentDto
+    // ✅ API: Lấy tất cả các lớp học
+    [HttpGet]
+    public async Task<IActionResult> GetAllCourses()
     {
-        public int StudentId { get; set; }
-        public int CourseId { get; set; }
+        var courses = await _courseService.GetAllCoursesAsync();
+        return Ok(courses);
     }
+
+    // ✅ API: Lấy thông tin lớp học theo ID
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetCourseById(int id)
+    {
+        var course = await _courseService.GetCourseByIdAsync(id);
+        if (course == null)
+        {
+            return NotFound(new { message = "Lớp học không tồn tại" });
+        }
+        return Ok(course);
+    }
+
+    // ✅ API: Tạo lớp học
+    [HttpPost]
+    public async Task<IActionResult> CreateCourse([FromBody] Course newCourse)
+    {
+        var createdCourse = await _courseService.CreateCourseAsync(newCourse);
+        return CreatedAtAction(nameof(GetCourseById), new { id = createdCourse.Id }, createdCourse);
+    }
+
+    // ✅ API: Cập nhật lớp học
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course updatedCourse)
+    {
+        if (id != updatedCourse.Id)
+        {
+            return BadRequest(new { message = "ID không khớp" });
+        }
+
+        var course = await _courseService.UpdateCourseAsync(updatedCourse);
+        if (course == null)
+        {
+            return NotFound(new { message = "Lớp học không tồn tại" });
+        }
+
+        return Ok(course);
+    }
+
+    // ✅ API: Xóa lớp học
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCourse(int id)
+    {
+        var isDeleted = await _courseService.DeleteCourseAsync(id);
+        if (!isDeleted)
+        {
+            return NotFound(new { message = "Lớp học không tồn tại" });
+        }
+        return NoContent();
+    }
+}
 }
