@@ -27,9 +27,6 @@ namespace Core.Entities
         [Column("teacher_id")]
         public int TeacherId { get; set; }
 
-        [Column("student_ids", TypeName = "integer[]")] // Ánh xạ với PostgreSQL ARRAY
-        public List<int>? StudentIds { get; set; } // Danh sách ID sinh viên, có thể NULL
-
         [Column("course_id")]
         public int CourseId { get; set; }
     }

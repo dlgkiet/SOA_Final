@@ -23,8 +23,8 @@ namespace Core.Entities
         [Column("teacher_id")] // Đảm bảo tên cột trong cơ sở dữ liệu là teacher_id
         public int TeacherId { get; set; }
 
-        [Column("student_id")] // Đảm bảo tên cột trong cơ sở dữ liệu là student_id
-        public int StudentId { get; set; }
+        [Column("student_ids", TypeName = "integer[]")] // Ánh xạ với PostgreSQL ARRAY
+        public List<int>? StudentIds { get; set; }
 
         [Column("created_at")] // Đảm bảo tên cột trong cơ sở dữ liệu là created_at
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
