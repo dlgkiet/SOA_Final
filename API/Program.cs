@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using DataAccess.Context;
+﻿using DataAccess.Context;
 using DataAccess.IReposiories;
 using DataAccess.IRepositories;
 using DataAccess.Repositories;

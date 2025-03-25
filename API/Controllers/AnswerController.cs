@@ -2,8 +2,9 @@
 using Core.Entities;
 using Service.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace WebAPI.Controllers
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -22,18 +23,19 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) => Ok(await _answerService.GetByIdAsync(id));
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Answer answer)
-        {
-            await _answerService.AddAsync(answer);
-            return CreatedAtAction(nameof(GetById), new { id = answer.Id }, answer);
-        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _answerService.DeleteAsync(id);
             return NoContent();
+        }
+
+        [HttpPost("submit-answer")]
+        public async Task<IActionResult> SubmitAnswers([FromBody] SubmitAnswerDto dto)
+        {
+            await _answerService.SubmitAnswersAsync(dto);
+            return Ok(new { message = "Answers submitted successfully." });
         }
     }
 }
