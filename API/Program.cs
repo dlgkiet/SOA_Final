@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using DataAccess.Context;
 using DataAccess.IReposiories;
+using DataAccess.IRepositories;
 using DataAccess.Repositories;
 
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 
 builder.Services.AddScoped<ILessonRepository, LessonRepository>();
+//builder.Services.AddScoped<ILessonRepository, LessonRepository>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 
 var app = builder.Build();

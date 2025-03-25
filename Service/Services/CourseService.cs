@@ -1,15 +1,8 @@
 ﻿using Core.Entities;
-<<<<<<< HEAD
 using DataAccess.IReposiories;
 using Service.IServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-=======
-using Microsoft.EntityFrameworkCore;
-using Service.IServices;
-using DataAccess.IRepositories;
-
->>>>>>> c69d4720d3eb36e9714f34ebe890ea29b4d55ae1
 
 namespace Service.Services
 {
@@ -22,7 +15,6 @@ namespace Service.Services
             _courseRepository = courseRepository;
         }
 
-<<<<<<< HEAD
         public async Task<bool> EnrollStudentAsync(int studentId, int courseId)
         {
             return await _courseRepository.EnrollStudentAsync(studentId, courseId);
@@ -31,7 +23,8 @@ namespace Service.Services
         public async Task<List<Course>> GetCoursesAsync()
         {
             return await _courseRepository.GetCoursesAsync();
-=======
+        }
+
         public async Task<IEnumerable<Course>> GetAllCoursesAsync()
         {
             return await _courseRepository.GetAllCoursesAsync();
@@ -55,7 +48,6 @@ namespace Service.Services
         public async Task<bool> DeleteCourseAsync(int id)
         {
             return await _courseRepository.DeleteCourseAsync(id);
->>>>>>> c69d4720d3eb36e9714f34ebe890ea29b4d55ae1
         }
     }
 }

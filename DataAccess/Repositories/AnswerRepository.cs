@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using DataAccess.Context;
 using DataAccess.IReposiories;
 
 
@@ -8,9 +9,9 @@ namespace DataAccess.Repositories
 {
     public class AnswerRepository : IAnswerRepository
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AnswerRepository(DbContext context)
+        public AnswerRepository(ApplicationDbContext context)
         {
             _context = context;
         }
