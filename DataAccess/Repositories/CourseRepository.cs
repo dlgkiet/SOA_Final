@@ -24,6 +24,39 @@ namespace DataAccess.Repositories
             return await _context.Courses.FindAsync(id);
         }
 
-    }
+        public async Task<Course> CreateCourseAsync(Course newCourse)
+        {
+            _context.Courses.Add(newCourse);
+            await _context.SaveChangesAsync();
+            return newCourse;
+        }
 
+        public async Task<Course?> UpdateCourseAsync(Course updatedCourse)
+        {
+            var existingCourse = await _context.Courses.FindAsync(updatedCourse.Id);
+            if (existingCourse == null)
+            {
+                throw new Exception("Course not found");
+            }
+
+            // Cập nhật các trường khác nhưng giữ nguyên createdAt
+            _context.Entry(existingCourse).CurrentValues.SetValues(updatedCourse);
+
+            // Đặt trạng thái của createdAt thành Unchanged để EF không cập nhật nó
+            _context.Entry(existingCourse).Property(c => c.CreatedAt).IsModified = false;
+
+            await _context.SaveChangesAsync();
+            return existingCourse;
+        }
+
+        public async Task<bool> DeleteCourseAsync(int id)
+        {
+            var course = await _context.Courses.FindAsync(id);
+            if (course == null) return false;
+
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    }
 }

@@ -24,6 +24,20 @@ namespace Service.Services
         {
             return await _courseRepository.GetCourseByIdAsync(id);
         }
-    }
 
+        public async Task<Course> CreateCourseAsync(Course newCourse)
+        {
+            return await _courseRepository.CreateCourseAsync(newCourse);
+        }
+
+        public async Task<Course?> UpdateCourseAsync(Course updatedCourse)
+        {
+            return await _courseRepository.UpdateCourseAsync(updatedCourse);
+        }
+
+        public async Task<bool> DeleteCourseAsync(int id)
+        {
+            return await _courseRepository.DeleteCourseAsync(id);
+        }
+    }
 }

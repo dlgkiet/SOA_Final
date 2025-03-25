@@ -32,4 +32,42 @@ public class CourseController : ControllerBase
         }
         return Ok(course);
     }
+
+    // ✅ API: Tạo lớp học
+    [HttpPost]
+    public async Task<IActionResult> CreateCourse([FromBody] Course newCourse)
+    {
+        var createdCourse = await _courseService.CreateCourseAsync(newCourse);
+        return CreatedAtAction(nameof(GetCourseById), new { id = createdCourse.Id }, createdCourse);
+    }
+
+    // ✅ API: Cập nhật lớp học
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course updatedCourse)
+    {
+        if (id != updatedCourse.Id)
+        {
+            return BadRequest(new { message = "ID không khớp" });
+        }
+
+        var course = await _courseService.UpdateCourseAsync(updatedCourse);
+        if (course == null)
+        {
+            return NotFound(new { message = "Lớp học không tồn tại" });
+        }
+
+        return Ok(course);
+    }
+
+    // ✅ API: Xóa lớp học
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCourse(int id)
+    {
+        var isDeleted = await _courseService.DeleteCourseAsync(id);
+        if (!isDeleted)
+        {
+            return NotFound(new { message = "Lớp học không tồn tại" });
+        }
+        return NoContent();
+    }
 }
