@@ -1,6 +1,8 @@
-﻿using DataAccess.Context;
+﻿using Core.Entities;
+using DataAccess.Context;
 using DataAccess.IReposiories;
 using DataAccess.Repositories;
+
 using Microsoft.EntityFrameworkCore;
 using Service.IServices;
 using Service.Services;
@@ -22,6 +24,12 @@ builder.Services.AddSwaggerGen();
 // Thêm các d?ch v? c?a b?n
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 var app = builder.Build();
 
@@ -46,3 +54,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

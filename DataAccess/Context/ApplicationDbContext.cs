@@ -12,7 +12,11 @@ namespace DataAccess.Context
     {
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
-
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Test> Tests { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     }
 }
