@@ -10,8 +10,8 @@ namespace DataAccess.Context
 {
     public class ApplicationDbContext : DbContext
     {
-        //public DbSet<Teacher> Teachers { get; set; }
-        //public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
 
