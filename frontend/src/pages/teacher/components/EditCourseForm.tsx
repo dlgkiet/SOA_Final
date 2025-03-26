@@ -1,5 +1,5 @@
-// components/EditCourseForm.tsx
 import { useState, useEffect } from 'react';
+import { fetchStudents } from '@/api/teacher';  // Import hàm fetchStudents
 
 interface EditCourseFormProps {
   course: any;
@@ -12,7 +12,25 @@ const EditCourseForm = ({ course, onSave, onClose }: EditCourseFormProps) => {
     name: '',
     description: '',
     schedule: '',
+    studentIds: [] as number[],  // Lưu danh sách ID sinh viên đã chọn
   });
+  const [students, setStudents] = useState<any[]>([]);  // Danh sách tất cả sinh viên
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadStudents = async () => {
+      try {
+        const data = await fetchStudents();  // Gọi API để lấy danh sách sinh viên
+        setStudents(data);  // Cập nhật danh sách sinh viên vào state
+      } catch (error: any) {
+        setError('Error fetching students');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadStudents();
+  }, []);
 
   useEffect(() => {
     if (course) {
@@ -20,6 +38,7 @@ const EditCourseForm = ({ course, onSave, onClose }: EditCourseFormProps) => {
         name: course.name,
         description: course.description,
         schedule: course.schedule,
+        studentIds: course.studentIds || [],  // Dữ liệu sinh viên của lớp được chọn
       });
     }
   }, [course]);
@@ -29,10 +48,24 @@ const EditCourseForm = ({ course, onSave, onClose }: EditCourseFormProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleStudentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    const studentId = parseInt(value);
+    setFormData((prev) => {
+      const updatedStudentIds = checked
+        ? [...prev.studentIds, studentId]
+        : prev.studentIds.filter((id) => id !== studentId);
+      return { ...prev, studentIds: updatedStudentIds };
+    });
+  };
+
   const handleSubmit = () => {
     onSave(course.id, formData);
     onClose();
   };
+
+  if (loading) return <div>Loading students...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="space-y-3">
@@ -57,6 +90,26 @@ const EditCourseForm = ({ course, onSave, onClose }: EditCourseFormProps) => {
         className="w-full p-2 border rounded"
         placeholder="Lịch học"
       />
+      
+      {/* Trường chọn sinh viên */}
+      <div>
+        <h4 className="font-semibold">Chọn sinh viên</h4>
+        <div className="space-y-2">
+          {students.map((student) => (
+            <div key={student.id} className="flex items-center">
+              <input
+                type="checkbox"
+                value={student.id}
+                checked={formData.studentIds.includes(student.id)}
+                onChange={handleStudentChange}
+                className="mr-2"
+              />
+              <label>{student.name}</label>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="flex justify-end gap-2">
         <button
           onClick={onClose}
