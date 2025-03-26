@@ -9,6 +9,18 @@ using Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// Cấu hình CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")  // URL của frontend
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -38,12 +50,6 @@ builder.Services.AddScoped<ILessonService, LessonService>();
 
 var app = builder.Build();
 
-// Tự động áp dụng migrations khi ứng dụng khởi động
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();  // Tự động áp dụng migration và tạo bảng nếu chưa có
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -53,6 +59,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
