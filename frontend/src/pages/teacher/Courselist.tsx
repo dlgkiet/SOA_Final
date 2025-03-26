@@ -5,7 +5,6 @@ import EditCourseForm from './components/EditCourseForm';
 import { updateCourse } from '@/api/teacher';
 import { Edit, Trash } from 'lucide-react'; // Import các icon từ lucide-react
 
-
 const CourseList = () => {
   const teacherId = 2;
   const { courses, loading, error } = useCourses(teacherId);
@@ -13,16 +12,19 @@ const CourseList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
 
+  // Hàm xử lý khi click vào nút chỉnh sửa
   const handleEditClick = (course: any) => {
-    setSelectedCourse(course);
-    setIsModalOpen(true);
+    setSelectedCourse(course);  // Truyền đối tượng course đầy đủ vào selectedCourse
+    setIsModalOpen(true);  // Mở modal
   };
 
+  // Hàm xử lý khi click vào nút xóa
   const handleDeleteClick = (courseId: number) => {
     console.log('Deleting course:', courseId);
     // TODO: Gọi API xóa khóa học tại đây
   };
 
+  // Hàm xử lý khi lưu dữ liệu khóa học sau khi chỉnh sửa
   const handleSave = async (id: number, updatedData: any) => {
     console.log('Saving course:', id, updatedData);
   
@@ -41,7 +43,7 @@ const CourseList = () => {
       // Gọi hàm updateCourse từ API
       const response = await updateCourse(id, courseData);
       console.log('Course updated successfully:', response);
-      setIsModalOpen(false);
+      setIsModalOpen(false);  // Đóng modal sau khi lưu thành công
       // Nếu cần, bạn có thể cập nhật lại danh sách khóa học trong state ở đây
     } catch (error: any) {
       console.error('Failed to update course:', error.message);
@@ -64,21 +66,21 @@ const CourseList = () => {
             <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.name}</h3>
             <p className="text-gray-700 mb-2">{course.description}</p>
             <p className="text-gray-500 mb-3">Lịch học: {course.schedule}</p>
-             <div className='flex gap-2'>
-             <button
-                onClick={() => handleEditClick(course.id)}
-                className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
-              >
-                <Edit size={16} /> {/* Icon chỉnh sửa */}
-                Chỉnh sửa
-              </button>
-              <button
-                onClick={() => handleDeleteClick(course.id)}
-                className="text-sm px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 flex items-center gap-2"
-              >
-                <Trash size={16} /> {/* Icon xóa */}
-                Xóa
-              </button>
+             <div className="flex gap-2">
+               <button
+                 onClick={() => handleEditClick(course)} // Truyền đối tượng course đầy đủ
+                 className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+               >
+                 <Edit size={16} /> {/* Icon chỉnh sửa */}
+                 Chỉnh sửa
+               </button>
+               <button
+                 onClick={() => handleDeleteClick(course.id)} // Truyền course.id khi xóa
+                 className="text-sm px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 flex items-center gap-2"
+               >
+                 <Trash size={16} /> {/* Icon xóa */}
+                 Xóa
+               </button>
              </div>
           </div>
         ))}
@@ -90,7 +92,7 @@ const CourseList = () => {
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative">
             <button
               className="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-lg"
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => setIsModalOpen(false)}  // Đóng modal khi click vào nút "✕"
             >
               ✕
             </button>
@@ -98,9 +100,9 @@ const CourseList = () => {
 
             {/* Sử dụng EditCourseForm */}
             <EditCourseForm
-              course={selectedCourse}
-              onSave={handleSave}
-              onClose={() => setIsModalOpen(false)}
+              course={selectedCourse}  // Truyền course đầy đủ cho form
+              onSave={handleSave}  // Hàm xử lý lưu khi chỉnh sửa
+              onClose={() => setIsModalOpen(false)}  // Đóng modal khi đóng form
             />
           </div>
         </div>
