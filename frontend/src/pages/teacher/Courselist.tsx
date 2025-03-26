@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useCourses } from '../../hooks/useCourses';
 import EditCourseForm from './components/EditCourseForm';
 import { updateCourse } from '@/api/teacher';
+import { Edit, Trash } from 'lucide-react'; // Import các icon từ lucide-react
+
 
 const CourseList = () => {
   const teacherId = 2;
@@ -14,6 +16,11 @@ const CourseList = () => {
   const handleEditClick = (course: any) => {
     setSelectedCourse(course);
     setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (courseId: number) => {
+    console.log('Deleting course:', courseId);
+    // TODO: Gọi API xóa khóa học tại đây
   };
 
   const handleSave = async (id: number, updatedData: any) => {
@@ -57,12 +64,22 @@ const CourseList = () => {
             <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.name}</h3>
             <p className="text-gray-700 mb-2">{course.description}</p>
             <p className="text-gray-500 mb-3">Lịch học: {course.schedule}</p>
-            <button
-              onClick={() => handleEditClick(course)}
-              className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Chỉnh sửa
-            </button>
+             <div className='flex gap-2'>
+             <button
+                onClick={() => handleEditClick(course.id)}
+                className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+              >
+                <Edit size={16} /> {/* Icon chỉnh sửa */}
+                Chỉnh sửa
+              </button>
+              <button
+                onClick={() => handleDeleteClick(course.id)}
+                className="text-sm px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 flex items-center gap-2"
+              >
+                <Trash size={16} /> {/* Icon xóa */}
+                Xóa
+              </button>
+             </div>
           </div>
         ))}
       </div>
