@@ -4,6 +4,7 @@ import { useCourses } from '../../hooks/useCourses';
 import EditCourseForm from './components/EditCourseForm';
 import { updateCourse, createCourse, deleteCourse } from '@/api/teacher';  // Import thêm createCourse
 import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
+import { Link } from 'react-router-dom';
 
 const CourseList = () => {
   const teacherId = 2;
@@ -125,32 +126,34 @@ const handleDeleteClick = async (courseId: number) => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <div
-            key={course.id}
-            className="bg-white p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-          >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.name}</h3>
-            <p className="text-gray-700 mb-2">{course.description}</p>
-            <p className="text-gray-500 mb-3">Lịch học: {course.schedule}</p>
-             <div className="flex gap-2">
-               <button
-                 onClick={() => handleEditClick(course)} // Truyền đối tượng course đầy đủ
-                 className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
-               >
-                 <Edit size={16} /> {/* Icon chỉnh sửa */}
-                 Chỉnh sửa
-               </button>
-               <button
-                 onClick={() => handleDeleteClick(course.id)} // Truyền course.id khi xóa
-                 className="text-sm px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 flex items-center gap-2"
-               >
-                 <Trash size={16} /> {/* Icon xóa */}
-                 Xóa
-               </button>
-             </div>
-          </div>
-        ))}
+      {courses.map((course) => (
+  <div
+    key={course.id}
+    className="bg-white p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+  >
+    <Link to={`/teacher/courses/${course.id}`} className="block">
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.name}</h3>
+      <p className="text-gray-700 mb-2">{course.description}</p>
+      <p className="text-gray-500 mb-3">Lịch học: {course.schedule}</p>
+    </Link>
+    <div className="flex gap-2">
+      <button
+        onClick={() => handleEditClick(course)} // Truyền đối tượng course đầy đủ
+        className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+      >
+        <Edit size={16} /> {/* Icon chỉnh sửa */}
+        Chỉnh sửa
+      </button>
+      <button
+        onClick={() => handleDeleteClick(course.id)} // Truyền course.id khi xóa
+        className="text-sm px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 flex items-center gap-2"
+      >
+        <Trash size={16} /> {/* Icon xóa */}
+        Xóa
+      </button>
+    </div>
+  </div>
+))}
       </div>
 
       {/* Modal tạo hoặc chỉnh sửa lớp học */}

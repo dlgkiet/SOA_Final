@@ -1,7 +1,7 @@
 import Dashboard from "@/pages/general/dashboard";
 import Test from "@/pages/general/test";
 import Courselist from "@/pages/teacher/Courselist";
-import CourseSchedule from "@/pages/teacher/CourseSchedule";
+import CourseSchedule from "@/pages/teacher/CourseDetail";
 import CourseStudents from "@/pages/teacher/CourseStudents";
 import { PropsWithChildren, useLayoutEffect } from "react";
 import {
@@ -10,6 +10,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import CourseDetail from "@/pages/teacher/CourseDetail";
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   const location = useLocation();
@@ -35,12 +36,8 @@ const routes = [
     element: <Courselist />, // Component to show list of courses
   },
   {
-    path: "/teacher/courses/students/:id",
-    element: <CourseStudents />, // Component to show list of students in a class
-  },
-  {
-    path: "/teacher/courses/schedule/:id",
-    element: <CourseSchedule />, // Component to manage class schedules
+    path: "/teacher/courses/:id",
+    element: <CourseDetail />, // Component to show list of courses
   },
 ];
 
