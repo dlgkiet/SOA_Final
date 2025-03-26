@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchStudents } from '@/api/teacher';  // Import hàm fetchStudents
 
 interface EditCourseFormProps {
-  course: any;
+  course?: any;  // `course` có thể không tồn tại khi tạo mới
   onSave: (id: number, updatedData: any) => void;
   onClose: () => void;
 }
@@ -60,7 +60,14 @@ const EditCourseForm = ({ course, onSave, onClose }: EditCourseFormProps) => {
   };
 
   const handleSubmit = () => {
-    onSave(course.id, formData);
+    if (course) {
+      // Nếu có course, thực hiện update
+      onSave(course.id, formData);
+    } else {
+      // Nếu không có course, thực hiện tạo mới
+      const newCourseData = { ...formData, teacherId: 2, createdAt: new Date().toISOString() };
+      onSave(0, newCourseData);  // Gửi id = 0 cho trường hợp tạo mới
+    }
     onClose();
   };
 

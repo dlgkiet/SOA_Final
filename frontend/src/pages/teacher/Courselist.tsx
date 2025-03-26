@@ -2,20 +2,21 @@
 import { useState } from 'react';
 import { useCourses } from '../../hooks/useCourses';
 import EditCourseForm from './components/EditCourseForm';
-import { updateCourse } from '@/api/teacher';
+import { updateCourse, createCourse } from '@/api/teacher';  // Import thêm createCourse
 import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 
 const CourseList = () => {
   const teacherId = 2;
-  const { courses, loading, error, setCourses } = useCourses(teacherId);  // Lấy setCourses từ useCourses hook
+  const { courses, loading, error, setCourses } = useCourses(teacherId);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [validationErrors, setValidationErrors] = useState<any>({}); // Lưu trữ lỗi validation
 
   // Hàm xử lý khi click vào nút chỉnh sửa
   const handleEditClick = (course: any) => {
-    setSelectedCourse(course);  // Truyền đối tượng course đầy đủ vào selectedCourse
-    setIsModalOpen(true);  // Mở modal
+    setSelectedCourse(course);
+    setIsModalOpen(true);
   };
 
   // Hàm xử lý khi click vào nút xóa
@@ -28,33 +29,66 @@ const CourseList = () => {
   const handleSave = async (id: number, updatedData: any) => {
     console.log('Saving course:', id, updatedData);
   
-    // Dữ liệu cần gửi lên API
     const courseData = {
       id: id,
       name: updatedData.name,
       description: updatedData.description,
       schedule: updatedData.schedule,
-      teacherId: 2, // Giả sử teacherId là 2, bạn có thể thay đổi giá trị này tùy theo yêu cầu
-      studentIds: [1], // Giả sử chỉ có một học sinh, bạn có thể thay đổi danh sách học sinh này nếu cần
-      createdAt: new Date().toISOString(), // Giả sử thời gian tạo là thời gian hiện tại
+      teacherId: 2,  // Giả sử teacherId là 2, bạn có thể thay đổi giá trị này tùy theo yêu cầu
+      studentIds: updatedData.studentIds || [],  // Lấy studentIds từ form nếu có
+      createdAt: new Date().toISOString(),  // Giả sử thời gian tạo là thời gian hiện tại
     };
-  
+
     try {
-      // Gọi hàm updateCourse từ API
       const response = await updateCourse(id, courseData);
       console.log('Course updated successfully:', response);
 
-      // Cập nhật lại danh sách khóa học trong state
       setCourses((prevCourses) => 
         prevCourses.map(course => 
           course.id === id ? { ...course, ...updatedData } : course
         )
       );
-
-      // Đóng modal sau khi lưu thành công
       setIsModalOpen(false);
     } catch (error: any) {
       console.error('Failed to update course:', error.message);
+    }
+  };
+
+  // Hàm xử lý khi tạo khóa học mới
+  const handleCreateCourse = async (id: number, courseData: any) => {
+    // Kiểm tra nếu các trường bắt buộc có giá trị
+    const errors: any = {};
+    if (!courseData.name) {
+      errors.Name = 'The Name field is required.';
+    }
+    if (!courseData.schedule) {
+      errors.Schedule = 'The Schedule field is required.';
+    }
+    if (!courseData.description) {
+      errors.Description = 'The Description field is required.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);  // Lưu lỗi vào state
+      return;  // Dừng lại nếu có lỗi
+    }
+
+    try {
+      const coursePayload = {
+        id: 0,  // id = 0 khi tạo mới
+        name: courseData.name,
+        description: courseData.description,
+        schedule: courseData.schedule,
+        teacherId: 2,  // Giả sử teacherId là 2
+        studentIds: courseData.studentIds || [],  // Lấy studentIds từ form nếu có
+        createdAt: new Date().toISOString(),  // Thời gian tạo là thời gian hiện tại
+      };
+      
+      const response = await createCourse(coursePayload);  // Gọi API để tạo khóa học mới
+      setCourses((prevCourses) => [...prevCourses, response]);
+      setIsModalOpen(false);
+    } catch (error: any) {
+      console.error('Failed to create course:', error.message);
     }
   };
 
@@ -68,7 +102,10 @@ const CourseList = () => {
 
         {/* Nút tạo khóa học */}
         <button
-          onClick={() => console.log("Tạo khóa học")}  // Thêm logic khi nhấn nút Tạo khóa học
+          onClick={() => {
+            setSelectedCourse(null);  // Xóa dữ liệu khóa học đã chọn khi tạo mới
+            setIsModalOpen(true);  // Mở modal để tạo khóa học mới
+          }}
           className="flex items-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
         >
           <Plus size={16} /> {/* Icon thêm */}
@@ -105,8 +142,8 @@ const CourseList = () => {
         ))}
       </div>
 
-      {/* Modal chỉnh sửa */}
-      {isModalOpen && selectedCourse && (
+      {/* Modal tạo hoặc chỉnh sửa lớp học */}
+      {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative">
             <button
@@ -115,12 +152,12 @@ const CourseList = () => {
             >
               ✕
             </button>
-            <h3 className="text-xl font-bold mb-4">Chỉnh sửa lớp học</h3>
+            <h3 className="text-xl font-bold mb-4">{selectedCourse ? 'Chỉnh sửa lớp học' : 'Tạo khóa học mới'}</h3>
 
             {/* Sử dụng EditCourseForm */}
             <EditCourseForm
-              course={selectedCourse}  // Truyền course đầy đủ cho form
-              onSave={handleSave}  // Hàm xử lý lưu khi chỉnh sửa
+              course={selectedCourse}  // Nếu có khóa học đã chọn, truyền vào để chỉnh sửa
+              onSave={selectedCourse ? handleSave : handleCreateCourse}  // Sử dụng handleSave nếu có khóa học đã chọn, nếu không sử dụng handleCreateCourse
               onClose={() => setIsModalOpen(false)}  // Đóng modal khi đóng form
             />
           </div>
