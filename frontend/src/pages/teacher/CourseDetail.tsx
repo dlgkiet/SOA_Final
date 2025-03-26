@@ -59,7 +59,7 @@ const CourseDetail = () => {
   ];
     
 
-  const students : any = [];
+  // const students : any = [];
 
   return (
     <div className="container mx-auto p-6">
