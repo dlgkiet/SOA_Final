@@ -22,5 +22,5 @@ export const useCourses = (teacherId: number) => {
     loadCourses();
   }, [teacherId]);
 
-  return { courses, loading, error };
+  return { courses, loading, error, setCourses };  // Trả về setCourses để cập nhật lại state
 };

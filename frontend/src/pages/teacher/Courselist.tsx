@@ -7,7 +7,7 @@ import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucid
 
 const CourseList = () => {
   const teacherId = 2;
-  const { courses, loading, error } = useCourses(teacherId);
+  const { courses, loading, error, setCourses } = useCourses(teacherId);  // Lấy setCourses từ useCourses hook
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
@@ -43,8 +43,16 @@ const CourseList = () => {
       // Gọi hàm updateCourse từ API
       const response = await updateCourse(id, courseData);
       console.log('Course updated successfully:', response);
-      setIsModalOpen(false);  // Đóng modal sau khi lưu thành công
-      // Nếu cần, bạn có thể cập nhật lại danh sách khóa học trong state ở đây
+
+      // Cập nhật lại danh sách khóa học trong state
+      setCourses((prevCourses) => 
+        prevCourses.map(course => 
+          course.id === id ? { ...course, ...updatedData } : course
+        )
+      );
+
+      // Đóng modal sau khi lưu thành công
+      setIsModalOpen(false);
     } catch (error: any) {
       console.error('Failed to update course:', error.message);
     }
@@ -55,7 +63,7 @@ const CourseList = () => {
 
   return (
     <div className="container mx-auto p-6">
-<div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Lớp đang dạy</h2>
 
         {/* Nút tạo khóa học */}
@@ -67,6 +75,7 @@ const CourseList = () => {
           Tạo khóa học
         </button>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
           <div
