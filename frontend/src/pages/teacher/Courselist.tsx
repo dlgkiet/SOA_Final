@@ -1,7 +1,6 @@
 import { useCourses } from '../../hooks/useCourses';
 
-const Courselist = () => {
-
+const CourseList = () => {
   const teacherId = 2;
   const { courses, loading, error } = useCourses(teacherId);
 
@@ -9,19 +8,24 @@ const Courselist = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
-      <h2>Lớp đang dạy</h2>
-      <ul>
+    <div className="container mx-auto p-6">
+      <h2 className="text-2xl font-semibold mb-4">Lớp đang dạy</h2>
+
+      {/* Các card hiển thị danh sách lớp học */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
-          <li key={course.id}>
-            <h3>{course.name}</h3>
-            <p>{course.description}</p>
-            <p>Lịch học: {course.schedule}</p>
-          </li>
+          <div
+            key={course.id}
+            className="bg-white p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.name}</h3>
+            <p className="text-gray-700 mb-2">{course.description}</p>
+            <p className="text-gray-500">Lịch học: {course.schedule}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
 
-export default Courselist;
+export default CourseList;
