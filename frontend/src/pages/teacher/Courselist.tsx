@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useCourses } from '../../hooks/useCourses';
 import EditCourseForm from './components/EditCourseForm';
 import { updateCourse } from '@/api/teacher';
-import { Edit, Trash } from 'lucide-react'; // Import các icon từ lucide-react
+import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 
 const CourseList = () => {
   const teacherId = 2;
@@ -55,8 +55,18 @@ const CourseList = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-4">Lớp đang dạy</h2>
+<div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold">Lớp đang dạy</h2>
 
+        {/* Nút tạo khóa học */}
+        <button
+          onClick={() => console.log("Tạo khóa học")}  // Thêm logic khi nhấn nút Tạo khóa học
+          className="flex items-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          <Plus size={16} /> {/* Icon thêm */}
+          Tạo khóa học
+        </button>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
           <div
