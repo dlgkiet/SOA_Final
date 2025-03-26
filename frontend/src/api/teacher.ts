@@ -36,3 +36,12 @@ export const fetchStudents = async () => {
     throw new Error(error.response?.data?.message || 'Failed to fetch students');
   }
 };
+
+export const deleteCourse = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/courses/${id}`);
+    return response.data;  // Trả về dữ liệu trả về từ API nếu cần
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to delete course');
+  }
+};

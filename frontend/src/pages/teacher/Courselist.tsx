@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useCourses } from '../../hooks/useCourses';
 import EditCourseForm from './components/EditCourseForm';
-import { updateCourse, createCourse } from '@/api/teacher';  // Import thêm createCourse
+import { updateCourse, createCourse, deleteCourse } from '@/api/teacher';  // Import thêm createCourse
 import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 
 const CourseList = () => {
@@ -20,10 +20,21 @@ const CourseList = () => {
   };
 
   // Hàm xử lý khi click vào nút xóa
-  const handleDeleteClick = (courseId: number) => {
-    console.log('Deleting course:', courseId);
-    // TODO: Gọi API xóa khóa học tại đây
-  };
+  // Hàm xử lý khi click vào nút xóa
+const handleDeleteClick = async (courseId: number) => {
+  try {
+    // Gọi API xóa khóa học
+    await deleteCourse(courseId);
+
+    // Cập nhật lại danh sách khóa học trong state sau khi xóa thành công
+    setCourses((prevCourses) => prevCourses.filter(course => course.id !== courseId));
+
+    console.log('Course deleted successfully');
+  } catch (error: any) {
+    console.error('Failed to delete course:', error.message);
+  }
+};
+
 
   // Hàm xử lý khi lưu dữ liệu khóa học sau khi chỉnh sửa
   const handleSave = async (id: number, updatedData: any) => {
