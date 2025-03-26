@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useCourses } from '../../hooks/useCourses';
 import EditCourseForm from './components/EditCourseForm';
+import { updateCourse } from '@/api/teacher';
 
 const CourseList = () => {
   const teacherId = 2;
@@ -17,8 +18,27 @@ const CourseList = () => {
 
   const handleSave = async (id: number, updatedData: any) => {
     console.log('Saving course:', id, updatedData);
-    // TODO: Gọi API cập nhật tại đây và cập nhật lại state nếu cần
-    setIsModalOpen(false);
+  
+    // Dữ liệu cần gửi lên API
+    const courseData = {
+      id: id,
+      name: updatedData.name,
+      description: updatedData.description,
+      schedule: updatedData.schedule,
+      teacherId: 2, // Giả sử teacherId là 2, bạn có thể thay đổi giá trị này tùy theo yêu cầu
+      studentIds: [1], // Giả sử chỉ có một học sinh, bạn có thể thay đổi danh sách học sinh này nếu cần
+      createdAt: new Date().toISOString(), // Giả sử thời gian tạo là thời gian hiện tại
+    };
+  
+    try {
+      // Gọi hàm updateCourse từ API
+      const response = await updateCourse(id, courseData);
+      console.log('Course updated successfully:', response);
+      setIsModalOpen(false);
+      // Nếu cần, bạn có thể cập nhật lại danh sách khóa học trong state ở đây
+    } catch (error: any) {
+      console.error('Failed to update course:', error.message);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
