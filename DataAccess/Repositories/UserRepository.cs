@@ -85,14 +85,12 @@ namespace DataAccess.Repositories
                     teacher.Name = name;
                     teacher.Birthday = birthday;
                     teacher.Email = email;
-                    teacher.CourseId = classId;
                 }
                 else if (user is Student student)
                 {
                     student.Name = name;
                     student.Birthday = birthday;
                     student.Email = email;
-                    student.CourseId = classId;
                 }
 
                 await _context.SaveChangesAsync();
