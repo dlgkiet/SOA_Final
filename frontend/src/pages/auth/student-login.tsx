@@ -5,18 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginBackground from "@/assets/images/student-login-background.jpg";
+import { loginStudent } from "@/api/auth";
 
 export default function StudentLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    // e.preventDefault();
-    // loginMutate({ email: inputs.email, password: inputs.password });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const response = await loginStudent(inputs);
+    if (response) {
+      localStorage.setItem("token", response.token); // Lưu token vào localStorage
+      navigate("/dashboard"); // Điều hướng đến trang Dashboard
+    } else {
+      setError("Email hoặc mật khẩu không đúng!");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -32,10 +47,12 @@ export default function StudentLogin() {
           <h2 className="text-3xl font-bold text-gray-800">Đăng nhập</h2>
           <p className="text-gray-500 mb-6">Đăng nhập dành cho sinh viên</p>
 
+          {error && <p className="text-red-500">{error}</p>}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input type="text" name="email" value={inputs.email} onChange={handleChange} required />
+              <Input type="email" name="email" value={inputs.email} onChange={handleChange} required />
             </div>
 
             <div className="space-y-2">
@@ -48,9 +65,8 @@ export default function StudentLogin() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" /* disabled={isLoginLoading} */>
-              {/* {isLoginLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Đăng nhập"} */}
-              Đăng nhập
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Đăng nhập"}
             </Button>
           </form>
         </div>

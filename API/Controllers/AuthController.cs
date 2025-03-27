@@ -4,7 +4,7 @@ using Service.Services;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/login")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace API.Controllers
         }
 
         // Đăng nhập cho Admin
-        [HttpPost("login/admin")]
+        [HttpPost("admin")]
         public async Task<IActionResult> LoginAdmin([FromBody] LoginRequest request)
         {
             try
@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         // Đăng nhập cho Teacher
-        [HttpPost("login/teacher")]
+        [HttpPost("teacher")]
         public async Task<IActionResult> LoginTeacher([FromBody] LoginRequest request)
         {
             try
@@ -48,7 +48,7 @@ namespace API.Controllers
         }
 
         // Đăng nhập cho Student
-        [HttpPost("login/student")]
+        [HttpPost("student")]
         public async Task<IActionResult> LoginStudent([FromBody] LoginRequest request)
         {
             try
