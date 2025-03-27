@@ -25,9 +25,9 @@ const ProtectedRoute = ({
   // Kiểm tra xem user có ít nhất 1 quyền phù hợp không
   const hasPermission = allowedRoles.some((role) => permissions.includes(role));
 
-//   if (!hasPermission) {
-//     return <Forbidden />; // Hiển thị trang không có quyền truy cập
-//   }
+  if (!hasPermission) {
+    return <Forbidden />; // Hiển thị trang không có quyền truy cập
+  }
 
   return <>{children}</>;
 };

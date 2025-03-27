@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -24,11 +24,14 @@ const navLinks = {
 };
 
 const Navbar = () => {
-  const storedUser = localStorage.getItem("user");
-  const user: { role: "student" | "teacher" | "admin" } | null = storedUser ? JSON.parse(storedUser) : null;
-  const role = user?.role ?? "student"; // Mặc định là student nếu không có role
+  const [role, setRole] = useState<"student" | "teacher" | "admin">("student");
 
-  const navigationLinks = useMemo(() => navLinks[role] || [], [role]);
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role") as "student" | "teacher" | "admin";
+    if (storedRole) setRole(storedRole);
+  }, []);
+
+  const navigationLinks = navLinks[role] || [];
 
   return (
     <ScrollArea className="w-full whitespace-nowrap rounded-md pb-0">

@@ -22,17 +22,19 @@ export default function StudentLogin() {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+  
     const response = await loginStudent(inputs);
     if (response) {
-      localStorage.setItem("token", response.token); // Lưu token vào localStorage
-      navigate("/dashboard"); // Điều hướng đến trang Dashboard
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("role", "student");
+      navigate("/");
     } else {
       setError("Email hoặc mật khẩu không đúng!");
     }
-
+  
     setLoading(false);
   };
+  
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
