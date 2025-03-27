@@ -1,4 +1,5 @@
 using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.IServices;
 using System.Threading.Tasks;
@@ -17,13 +18,14 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
 
-    // ✅ API: Lấy tất cả các lớp học
-    [HttpGet]
-    public async Task<IActionResult> GetAllCourses()
-    {
-        var courses = await _courseService.GetAllCoursesAsync();
-        return Ok(courses);
-    }
+        // ✅ API: Lấy tất cả các lớp học
+        [HttpGet]
+        [Authorize(Policy = "StudentOrAdmin")]  // Phân quyền cho Admin, và Student
+        public async Task<IActionResult> GetAllCourses()
+        {
+            var courses = await _courseService.GetAllCoursesAsync();
+            return Ok(courses);
+        }
 
     // ✅ API: Lấy thông tin lớp học theo ID
     [HttpGet("{id}")]

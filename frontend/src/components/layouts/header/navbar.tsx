@@ -11,8 +11,7 @@ const navLinks = {
     { title: "Lịch học", href: "/schedule" },
   ],
   teacher: [
-    { title: "Quản lý khóa học", href: "/manage-courses" },
-    { title: "Quản lý lớp học", href: "/manage-classrooms" },
+    { title: "Quản lý khóa học", href: "/teacher/courses" },
     { title: "Chấm bài", href: "/grading" },
     { title: "Thống kê", href: "/statistics" },
   ],

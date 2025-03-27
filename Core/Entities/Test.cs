@@ -16,10 +16,7 @@ namespace Core.Entities
         public int Id { get; set; }
 
         [Column("content")]
-        public string Content { get; set; }
-
-        [Column("student_id")]
-        public int StudentId { get; set; }
+        public string? Content { get; set; }
 
         [Column("teacher_id")]
         public int TeacherId { get; set; }

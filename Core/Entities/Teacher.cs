@@ -22,8 +22,5 @@ namespace Core.Entities
 
         [Column("password")]  // Đảm bảo tên cột trong cơ sở dữ liệu là password
         public string Password { get; set; }
-
-        [Column("course_id")]  // Đảm bảo tên cột trong cơ sở dữ liệu là class_id
-        public int CourseId { get; set; }
     }
 }

@@ -6,6 +6,14 @@ using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Service.IServices;
 using Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;  // Để sử dụng TokenValidationParameters và SymmetricSecurityKey
+using System.Text;
+using Microsoft.Data.SqlClient;  // Để sử dụng Encoding
+using Microsoft.OpenApi.Models;  // Thêm thư viện này để sử dụng OpenApiInfo, OpenApiSecurityScheme, SecuritySchemeType
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +40,61 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // C?u hình Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+
+    // Cấu hình Swagger để hỗ trợ Bearer Authentication
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+
+// Cấu hình JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],  // Thay bằng issuer thực tế của bạn
+            ValidAudience = builder.Configuration["Jwt:Audience"],  // Thay bằng audience thực tế của bạn
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))  // Secret key cho JWT
+        };
+    });
+
+
+builder.Services.AddAuthorization(options =>
+{
+    // Thêm các chính sách phân quyền
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("TeacherOrAdmin", policy => policy.RequireRole("Teacher", "Admin"));
+    options.AddPolicy("StudentOrAdmin", policy => policy.RequireRole("Student", "Admin"));
+});
+
 
 // Thêm các d?ch v? c?a b?n
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -43,10 +105,14 @@ builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ICourseService, CourseService>();
-
 builder.Services.AddScoped<ILessonRepository, LessonRepository>();
-//builder.Services.AddScoped<ILessonRepository, LessonRepository>();
 builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ITestRepository, TestRepository>();
+builder.Services.AddScoped<ITestService, TestService>();
+
+// Đăng ký AuthService vào DI container
+builder.Services.AddScoped<AuthService>();  
+
 
 var app = builder.Build();
 
@@ -62,7 +128,9 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 
-app.UseAuthorization();
+// Cấu hình middleware
+app.UseAuthentication(); // Xác thực JWT
+app.UseAuthorization();  // Phân quyền
 
 app.MapControllers();
 

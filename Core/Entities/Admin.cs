@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    [Table("students")]  // Chỉ định tên bảng trong cơ sở dữ liệu
-    public class Student
+    [Table("admins")]  // Chỉ định tên bảng trong cơ sở dữ liệu
+    public class Admin
     {
         [Column("id")]  // Đảm bảo tên cột trong cơ sở dữ liệu là id
         public int Id { get; set; }

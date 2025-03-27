@@ -3,6 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "r
 
 // General
 import Dashboard from "@/pages/general/dashboard";
+import Test from "@/pages/general/test";
+import Courselist from "@/pages/teacher/Courselist";
+import CourseSchedule from "@/pages/teacher/CourseDetail";
+import CourseStudents from "@/pages/teacher/CourseStudents";
+import CourseDetail from "@/pages/teacher/CourseDetail";
 import ProtectedRoute from "./protected";
 import Login from "@/pages/auth";
 import StudentLogin from "@/pages/auth/student-login";
@@ -37,6 +42,22 @@ const routes = [
   {
     path: "/teacher-login",
     element: <TeacherLogin />
+  },
+  {
+    path: "/teacher/courses",
+    element: <Courselist />, // Component to show list of courses
+  },
+  {
+    path: "/teacher/courses/:id",
+    element: <CourseDetail />, // Component to show list of courses
+  },
+  {
+    path: "/teacher/courses",
+    element: <Courselist />, // Component to show list of courses
+  },
+  {
+    path: "/teacher/courses/:id",
+    element: <CourseDetail />, // Component to show list of courses
   },
 ];
 
