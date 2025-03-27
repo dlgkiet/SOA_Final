@@ -21,7 +21,7 @@ const CreateTestModal = ({ isOpen, onClose, courseId }: CreateTestModalProps) =>
     const testData = {
       content,
       teacherId: 2,  // Giả sử teacherId là 2
-      deadline,
+      deadline: new Date(deadline).toISOString(), // Đảm bảo thời gian là UTC
       courseId,
     };
 
