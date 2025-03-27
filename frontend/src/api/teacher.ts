@@ -72,3 +72,53 @@ export const fetchLessons = async (teacherId: number, courseId: number) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch lessons');
   }
 };
+
+// Lấy tất cả các bài kiểm tra
+export const fetchTests = async () => {
+  try {
+    const response = await axiosInstance.get('/tests');
+    return response.data;  // Trả về danh sách bài kiểm tra
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch tests');
+  }
+};
+
+// Lấy thông tin bài kiểm tra theo id
+export const fetchTestById = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/tests/${id}`);
+    return response.data;  // Trả về bài kiểm tra theo id
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch test');
+  }
+};
+
+// Cập nhật bài kiểm tra
+export const updateTest = async (id: number, testData: any) => {
+  try {
+    const response = await axiosInstance.put(`/tests/${id}`, testData);
+    return response.data;  // Trả về bài kiểm tra đã được cập nhật
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to update test');
+  }
+};
+
+// Tạo bài kiểm tra mới
+export const createTest = async (testData: any) => {
+  try {
+    const response = await axiosInstance.post('/tests', testData);
+    return response.data;  // Trả về bài kiểm tra vừa tạo
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to create test');
+  }
+};
+
+// Xóa bài kiểm tra
+export const deleteTest = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/tests/${id}`);
+    return response.data;  // Trả về kết quả xóa bài kiểm tra
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to delete test');
+  }
+};
