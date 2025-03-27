@@ -22,7 +22,7 @@ export default function Header() {
             <Menu className="w-6 h-6" />
           </Button>
           <Link to="/" className="flex items-center space-x-2 text-xl font-bold text-gray-800">
-            <BookOpen className="w-6 h-6 text-blue-600" />
+            <BookOpen className="w-6 h-6" />
             <span>LMS System</span>
           </Link>
         </div>
