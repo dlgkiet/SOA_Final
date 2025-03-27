@@ -97,7 +97,7 @@ const EditCourseForm = ({ course, onSave, onClose }: EditCourseFormProps) => {
         className="w-full p-2 border rounded"
         placeholder="Lịch học"
       />
-      
+
       {/* Trường chọn sinh viên */}
       <div>
         <h4 className="font-semibold">Chọn sinh viên</h4>

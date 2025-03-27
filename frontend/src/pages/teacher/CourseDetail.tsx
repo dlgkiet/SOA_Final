@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher"; // API lấy khóa học, bài học và bài kiểm tra
 import Layout from "@/components/layouts";
-import CreateTestModal from "./components/CreateTestModal"; // Modal tạo bài kiểm tra
-import CreateLessonModal from "./components/CreateLessonModal"; // Modal tạo bài học
-import TestList from "./components/TestList";
+import CreateTestModal from "./components/tests/CreateTestModal"; // Modal tạo bài kiểm tra
+import CreateLessonModal from "./components/lessons/CreateLessonModal"; // Modal tạo bài học
+import TestList from "./components/tests/TestList";
 
 const CourseDetail = () => {
   const { id } = useParams(); // Lấy ID khóa học từ URL (tham số :id)
