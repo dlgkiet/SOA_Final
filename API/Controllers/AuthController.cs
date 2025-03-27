@@ -4,6 +4,7 @@ using Service.IServices;
 using Core.Entities;
 using System.Threading.Tasks;
 using DataAccess.IReposiories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -35,7 +36,7 @@ namespace API.Controllers
                 return Ok(new
                 {
                     Token = token,
-                    Role = "Admin",
+                    Role = "admin",
                     UserId = admin?.Id,
                     Name = admin?.Name,
                     Birthday = admin?.Birthday,
@@ -63,7 +64,7 @@ namespace API.Controllers
                 return Ok(new
                 {
                     Token = token,
-                    Role = "Teacher",
+                    Role = "teacher",
                     UserId = teacher?.Id,
                     Name = teacher?.Name,
                     Birthday = teacher?.Birthday,
@@ -91,7 +92,7 @@ namespace API.Controllers
                 return Ok(new
                 {
                     Token = token,
-                    Role = "Student",
+                    Role = "student",
                     UserId = student?.Id,
                     Name = student?.Name,
                     Birthday = student?.Birthday,
@@ -102,6 +103,20 @@ namespace API.Controllers
             {
                 return Unauthorized("Invalid credentials");
             }
+        }
+        // API Logout dùng chung cho tất cả user
+        [HttpPost("logout")]
+        //[Authorize] // Yêu cầu user phải đăng nhập trước khi logout
+        public IActionResult Logout()
+        {
+            // Xóa cookie chứa token (nếu có)
+            if (Request.Cookies["AuthToken"] != null)
+            {
+                Response.Cookies.Delete("AuthToken");
+            }
+
+            // Trả về trạng thái thành công
+            return Ok(new { message = "Logged out successfully" });
         }
     }
 }

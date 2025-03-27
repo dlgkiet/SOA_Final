@@ -9,8 +9,9 @@ export interface IErrorResponse {
 }
 
 export interface ILoginData {
-  id: number
+  userId: number
   name: string | null
   email: string
   birthday: Date
+  role: string
 }

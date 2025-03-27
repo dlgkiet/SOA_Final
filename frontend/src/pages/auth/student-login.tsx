@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,13 +6,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginBackground from "@/assets/images/student-login-background.jpg";
 import { loginStudent } from "@/api/auth";
+import { useAuthStore } from "@/stores/auth-store";
+import { useShallow } from "zustand/react/shallow";
+import Cookies from "js-cookie";
 
 export default function StudentLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const { _ia, setUserInformation, setIsAuthenticated } = useAuthStore(
+    useShallow((state) => state)
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -20,21 +27,35 @@ export default function StudentLogin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     setError("");
-  
+
     const response = await loginStudent(inputs);
     if (response) {
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("role", "student");
+      Cookies.set("AuthToken", response.token, { expires: 1, path: "/" }); // Lưu token vào cookie
+      setIsAuthenticated(true);
+
+      setUserInformation({
+        userId: response.userId,
+        name: response.name,
+        birthday: response.birthday,
+        email: response.email,
+        role: response.role,
+      });
+
       navigate("/");
     } else {
       setError("Email hoặc mật khẩu không đúng!");
     }
-  
-    setLoading(false);
+
+    setIsLoading(false);
   };
-  
+
+  useEffect(() => {
+    if (_ia) {
+      navigate("/", { replace: true });
+    }
+  }, [_ia, navigate]);
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -54,28 +75,53 @@ export default function StudentLogin() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input type="email" name="email" value={inputs.email} onChange={handleChange} required />
+              <Input
+                type="email"
+                name="email"
+                value={inputs.email}
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <div className="space-y-2">
               <Label>Mật khẩu</Label>
               <div className="relative">
-                <Input type={showPassword ? "text" : "password"} name="password" value={inputs.password} onChange={handleChange} required />
-                <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-0" onClick={() => setShowPassword(!showPassword)}>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={inputs.password}
+                  onChange={handleChange}
+                  required
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-0"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
                   {showPassword ? <EyeOff /> : <Eye />}
                 </Button>
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Đăng nhập"}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                "Đăng nhập"
+              )}
             </Button>
           </form>
         </div>
       </div>
 
       {/* Hình nền bên phải */}
-      <div className="w-full md:w-1/2 hidden md:block bg-cover bg-center" style={{ backgroundImage: `url(${LoginBackground})` }} />
+      <div
+        className="w-full md:w-1/2 hidden md:block bg-cover bg-center"
+        style={{ backgroundImage: `url(${LoginBackground})` }}
+      />
     </div>
   );
 }

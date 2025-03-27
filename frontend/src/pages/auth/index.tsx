@@ -1,8 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { BookOpen } from "lucide-react";
+import { useEffect } from "react";
+import { useAuthStore } from "@/stores/auth-store";
+import { useShallow } from "zustand/react/shallow";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { _ia } = useAuthStore(useShallow((state) => state))
+
+  useEffect(() => {
+    if (_ia) {
+      navigate('/', { replace: true })
+    }
+  }, [_ia, navigate])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">

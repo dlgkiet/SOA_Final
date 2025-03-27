@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginBackground from "@/assets/images/teacher-login-background.jpg";
 import { loginTeacher } from "@/api/auth";
+import { useAuthStore } from "@/stores/auth-store";
+import { useShallow } from "zustand/react/shallow";
+import Cookies from "js-cookie";
 
 export default function TeacherLogin() {
   const navigate = useNavigate();
@@ -13,6 +16,10 @@ export default function TeacherLogin() {
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const { _ia, setUserInformation, setIsAuthenticated } = useAuthStore(
+    useShallow((state) => state)
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -22,19 +29,35 @@ export default function TeacherLogin() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-  
+
     const response = await loginTeacher(inputs);
-    if (response && response.token) {
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("role", "teacher");
+    if (response) {
+      Cookies.set("AuthToken", response.token, { expires: 1, path: "/" }); // Lưu token vào cookie
+      setIsAuthenticated(true);
+
+      setUserInformation({
+        userId: response.userId,
+        name: response.name,
+        birthday: response.birthday,
+        email: response.email,
+        role: response.role,
+      });
+
       navigate("/");
     } else {
-      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+      setError("Email hoặc mật khẩu không đúng!");
     }
-  
+
     setIsLoading(false);
   };
   
+  
+  
+    useEffect(() => {
+      if (_ia) {
+        navigate('/', { replace: true })
+      }
+    }, [_ia, navigate])
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
