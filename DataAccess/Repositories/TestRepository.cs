@@ -30,10 +30,11 @@ namespace DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTestAsync(Test test)
+        public async Task<Test> UpdateTestAsync(Test test)
         {
-            _context.Tests.Update(test);
-            await _context.SaveChangesAsync();
+            _context.Tests.Update(test);  // Cập nhật bài kiểm tra trong DbContext
+            await _context.SaveChangesAsync();  // Lưu các thay đổi vào cơ sở dữ liệu
+            return test;  // Trả về bài kiểm tra đã được cập nhật
         }
 
         public async Task DeleteTestAsync(int id)

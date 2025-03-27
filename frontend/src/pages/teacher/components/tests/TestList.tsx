@@ -45,7 +45,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
       {tests.length > 0 ? (
         <div className="space-y-4">
           {tests.map((test) => (
-            <div key={test.id} className="bg-white p-4 border rounded-lg shadow-md">
+            <div key={test.id} className="bg-white p-4 border rounded-lg shadow-md"> {/* Key duy nhất */}
               <h4 className="text-xl font-medium mb-2">{test.content}</h4>
               <p className="text-gray-500 text-sm mt-2">
                 Thời gian hết hạn: {new Date(test.deadline).toLocaleString()}
@@ -159,4 +159,5 @@ const EditTestModal = ({ isOpen, onClose, test, teacherId, courseId, onUpdateTes
     )
   );
 };
+
 export default TestList;

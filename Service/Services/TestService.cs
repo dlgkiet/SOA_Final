@@ -33,9 +33,9 @@ namespace Service.Services
             await _testRepository.AddTestAsync(test);
         }
 
-        public async Task UpdateTestAsync(Test test)
+        public async Task<Test> UpdateTestAsync(Test test)
         {
-            await _testRepository.UpdateTestAsync(test);
+            return await _testRepository.UpdateTestAsync(test);  // Gọi repo để cập nhật bài kiểm tra
         }
 
         public async Task DeleteTestAsync(int id)

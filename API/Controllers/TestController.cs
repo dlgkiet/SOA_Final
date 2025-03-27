@@ -45,16 +45,21 @@ namespace API.Controllers
 
         // PUT: api/test/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTest(int id, Test test)
+        public async Task<IActionResult> UpdateTest(int id, [FromBody] Test updatedTest)
         {
-            if (id != test.Id)
+            // Kiểm tra nếu ID trong URL không khớp với ID trong body
+            if (id != updatedTest.Id)
             {
-                return BadRequest();
+                return BadRequest(new { message = "ID không khớp" });
             }
 
-            await _testService.UpdateTestAsync(test);
-            return NoContent();
+            // Gọi service để cập nhật bài kiểm tra và nhận lại bài kiểm tra đã được cập nhật
+            var test = await _testService.UpdateTestAsync(updatedTest);
+
+            // Trả về bài kiểm tra đã được cập nhật
+            return Ok(test);
         }
+
 
         // DELETE: api/test/5
         [HttpDelete("{id}")]

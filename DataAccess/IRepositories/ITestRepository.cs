@@ -12,7 +12,7 @@ namespace DataAccess.IRepositories
         Task<Test> GetTestByIdAsync(int id);
         Task<IEnumerable<Test>> GetAllTestsAsync();
         Task AddTestAsync(Test test);
-        Task UpdateTestAsync(Test test);
+        Task<Test> UpdateTestAsync(Test test);  // Cập nhật và trả về bài kiểm tra đã cập nhật
         Task DeleteTestAsync(int id);
     }
 }

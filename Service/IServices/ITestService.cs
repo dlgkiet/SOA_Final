@@ -12,7 +12,7 @@ namespace Service.IServices
         Task<Test> GetTestByIdAsync(int id);
         Task<IEnumerable<Test>> GetAllTestsAsync();
         Task AddTestAsync(Test test);
-        Task UpdateTestAsync(Test test);
+        Task<Test> UpdateTestAsync(Test test);
         Task DeleteTestAsync(int id);
     }
 }

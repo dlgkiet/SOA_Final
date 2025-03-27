@@ -5,6 +5,7 @@ import Layout from "@/components/layouts";
 import CreateTestModal from "./components/tests/CreateTestModal"; // Modal tạo bài kiểm tra
 import CreateLessonModal from "./components/lessons/CreateLessonModal"; // Modal tạo bài học
 import TestList from "./components/tests/TestList";
+import { useAuthStore } from "@/stores/auth-store";
 
 const CourseDetail = () => {
   const { id } = useParams(); // Lấy ID khóa học từ URL (tham số :id)
@@ -16,7 +17,11 @@ const CourseDetail = () => {
   const [isTestModalOpen, setIsTestModalOpen] = useState<boolean>(false); // Trạng thái modal tạo bài kiểm tra
   const [isLessonModalOpen, setIsLessonModalOpen] = useState<boolean>(false); // Trạng thái modal tạo bài học
 
-  const teacherId = 2; // Giả sử teacherId là 2
+  // const teacherId = 2; 
+
+  const { _ui } = useAuthStore();
+
+  const teacherId = _ui?.userId;
 
   // Callback khi bài kiểm tra mới được thêm
   const handleAddTest = (newTest: any) => {
@@ -37,7 +42,7 @@ const CourseDetail = () => {
         const courseData = await fetchCourseById(Number(id));
         setCourse(courseData);
 
-        const lessonsData = await fetchLessons(teacherId, Number(id));
+        const lessonsData = await fetchLessons(Number(teacherId), Number(id));
         setLessons(lessonsData);
 
         const testsData = await fetchTests(Number(id));
@@ -138,7 +143,7 @@ const CourseDetail = () => {
         {/* Bài kiểm tra */}
         <TestList
           tests={tests}
-          teacherId={teacherId}
+          teacherId={Number(teacherId)}
           courseId={Number(id)}
           onUpdateTest={handleUpdateTest}
           onDeleteTest={handleDeleteTest}
