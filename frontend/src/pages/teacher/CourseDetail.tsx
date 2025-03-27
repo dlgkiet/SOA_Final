@@ -4,7 +4,6 @@ import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher"; // AP
 import Layout from "@/components/layouts";
 import CreateTestModal from "./components/CreateTestModal"; // Modal tạo bài kiểm tra
 import CreateLessonModal from "./components/CreateLessonModal"; // Modal tạo bài học
-import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 import TestList from "./components/TestList";
 
 const CourseDetail = () => {

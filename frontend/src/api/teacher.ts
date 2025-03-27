@@ -83,6 +83,26 @@ export const createLesson = async (lessonData: any) => {
   }
 };
 
+// Cập nhật bài học
+export const updateLesson = async (id: number, lessonData: any) => {
+  try {
+    const response = await axiosInstance.put(`/lessons/${id}`, lessonData);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || `Failed to update lesson with id ${id}`);
+  }
+};
+
+// Xóa bài học
+export const deleteLesson = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/lessons/${id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || `Failed to delete lesson with id ${id}`);
+  }
+};
+
 
 //=====================================END-LESSONS================================================
 
