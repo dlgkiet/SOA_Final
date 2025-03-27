@@ -4,6 +4,7 @@ import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher"; // AP
 import Layout from "@/components/layouts";
 import CreateTestModal from "./components/CreateTestModal"; // Modal tạo bài kiểm tra
 import CreateLessonModal from "./components/CreateLessonModal"; // Modal tạo bài học
+import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 
 const CourseDetail = () => {
   const { id } = useParams(); // Lấy ID khóa học từ URL (tham số :id)
@@ -129,12 +130,42 @@ const CourseDetail = () => {
               {tests.map((test) => (
                 <div key={test.id} className="bg-white p-4 border rounded-lg shadow-md">
                   {/* Tiêu đề bài kiểm tra là nội dung bài kiểm tra */}
-                  <h4 className="text-xl font-medium mb-2">{test.content}</h4>  {/* Tiêu đề là nội dung của bài kiểm tra */}
+                  <h4 className="text-xl font-medium mb-2">{test.content}</h4> {/* Tiêu đề là nội dung của bài kiểm tra */}
 
                   {/* Hiển thị thời gian hết hạn */}
                   <p className="text-gray-500 text-sm mt-2">
                     Thời gian hết hạn: {new Date(test.deadline).toLocaleString()}
                   </p>
+
+                  {/* Các nút chức năng: Tạo câu hỏi, Chỉnh sửa, Xóa */}
+                  <div className="flex gap-2 mt-4">
+                    {/* Tạo câu hỏi cho bài kiểm tra */}
+                    <button
+                      onClick={() => console.log('Tạo câu hỏi cho bài kiểm tra', test.id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                    >
+                      <Plus size={16} />
+                      Tạo câu hỏi
+                    </button>
+
+                    {/* Chỉnh sửa bài kiểm tra */}
+                    <button
+                      onClick={() => console.log('Chỉnh sửa bài kiểm tra', test.id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                      <Edit size={16} />
+                      Chỉnh sửa
+                    </button>
+
+                    {/* Xóa bài kiểm tra */}
+                    <button
+                      onClick={() => console.log('Xóa bài kiểm tra', test.id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      <Trash size={16} />
+                      Xóa
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -142,6 +173,7 @@ const CourseDetail = () => {
             <p>Chưa có bài kiểm tra nào cho khóa học này.</p>
           )}
         </div>
+
 
       </div>
     </Layout>
