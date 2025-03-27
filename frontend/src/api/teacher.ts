@@ -40,7 +40,7 @@ export const fetchStudents = async () => {
 export const deleteCourse = async (id: number) => {
   try {
     const response = await axiosInstance.delete(`/courses/${id}`);
-    return response.data;  // Trả về dữ liệu trả về từ API nếu cần
+    return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to delete course');
   }
@@ -57,34 +57,26 @@ export const fetchCourseById = async (id: number) => {
 
 export const fetchLessons = async (teacherId: number, courseId: number) => {
   try {
-    // Gửi yêu cầu GET tới API với các tham số teacherId và courseId
     const response = await axiosInstance.get('/lessons');
 
-    // Lọc dữ liệu sau khi nhận được response
     const filteredLessons = response.data.filter((lesson: any) => {
       return lesson.teacherId === teacherId && lesson.courseId === courseId;
     });
 
-    // Trả về dữ liệu đã lọc
     return filteredLessons;
   } catch (error: any) {
-    // Xử lý lỗi nếu có
     throw new Error(error.response?.data?.message || 'Failed to fetch lessons');
   }
 };
 
 export const fetchTests = async (courseId: number) => {
   try {
-    // Gửi yêu cầu GET tới API để lấy tất cả các bài kiểm tra
     const response = await axiosInstance.get('/Test');
     
-    // Lọc bài kiểm tra theo courseId
     const filteredTests = response.data.filter((test: any) => test.courseId === courseId);
     
-    // Trả về danh sách bài kiểm tra đã lọc
     return filteredTests;
   } catch (error: any) {
-    // Xử lý lỗi nếu có
     throw new Error(error.response?.data?.message || 'Failed to fetch tests');
   }
 };
@@ -93,7 +85,7 @@ export const fetchTests = async (courseId: number) => {
 export const fetchTestById = async (id: number) => {
   try {
     const response = await axiosInstance.get(`/tests/${id}`);
-    return response.data;  // Trả về bài kiểm tra theo id
+    return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch test');
   }
@@ -103,7 +95,7 @@ export const fetchTestById = async (id: number) => {
 export const updateTest = async (id: number, testData: any) => {
   try {
     const response = await axiosInstance.put(`/tests/${id}`, testData);
-    return response.data;  // Trả về bài kiểm tra đã được cập nhật
+    return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to update test');
   }
@@ -112,8 +104,8 @@ export const updateTest = async (id: number, testData: any) => {
 // Tạo bài kiểm tra mới
 export const createTest = async (testData: any) => {
   try {
-    const response = await axiosInstance.post('/tests', testData);
-    return response.data;  // Trả về bài kiểm tra vừa tạo
+    const response = await axiosInstance.post('/test', testData);
+    return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to create test');
   }
@@ -123,7 +115,7 @@ export const createTest = async (testData: any) => {
 export const deleteTest = async (id: number) => {
   try {
     const response = await axiosInstance.delete(`/tests/${id}`);
-    return response.data;  // Trả về kết quả xóa bài kiểm tra
+    return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to delete test');
   }
