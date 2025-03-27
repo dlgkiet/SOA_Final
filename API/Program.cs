@@ -25,9 +25,11 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5173")  // URL của frontend
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
+
 
 // Add services to the container.
 

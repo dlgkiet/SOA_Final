@@ -1,10 +1,10 @@
-import React from 'react'
+import Layout from '@/components/layouts'
 
 const Test = () => {
   return (
-    <div>
+    <Layout>
       TESTTTT
-    </div>
+    </Layout>
   )
 }
 
