@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Service.Services;
+using Service.IServices;
+using Core.Entities;
+using System.Threading.Tasks;
+using DataAccess.IReposiories;
 
 namespace API.Controllers
 {
@@ -9,10 +12,12 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthService authService, IUserRepository userRepository)
         {
             _authService = authService;
+            _userRepository = userRepository;
         }
 
         // Đăng nhập cho Admin
@@ -21,9 +26,21 @@ namespace API.Controllers
         {
             try
             {
-                // Gọi AuthService để lấy token JWT
                 var token = await _authService.LoginAdminAsync(request.Email, request.Password);
-                return Ok(new { Token = token });
+
+                // Lấy Admin từ cơ sở dữ liệu
+                var admin = await _userRepository.GetAdminByEmailAsync(request.Email);
+
+                // Trả về Token, Role và thông tin Admin (trừ mật khẩu)
+                return Ok(new
+                {
+                    Token = token,
+                    Role = "Admin",
+                    UserId = admin?.Id,
+                    Name = admin?.Name,
+                    Birthday = admin?.Birthday,
+                    Email = admin?.Email
+                });
             }
             catch (UnauthorizedAccessException)
             {
@@ -37,9 +54,21 @@ namespace API.Controllers
         {
             try
             {
-                // Gọi AuthService để lấy token JWT
                 var token = await _authService.LoginTeacherAsync(request.Email, request.Password);
-                return Ok(new { Token = token });
+
+                // Lấy Teacher từ cơ sở dữ liệu
+                var teacher = await _userRepository.GetTeacherByEmailAsync(request.Email);
+
+                // Trả về Token, Role và thông tin Teacher (trừ mật khẩu)
+                return Ok(new
+                {
+                    Token = token,
+                    Role = "Teacher",
+                    UserId = teacher?.Id,
+                    Name = teacher?.Name,
+                    Birthday = teacher?.Birthday,
+                    Email = teacher?.Email
+                });
             }
             catch (UnauthorizedAccessException)
             {
@@ -53,9 +82,21 @@ namespace API.Controllers
         {
             try
             {
-                // Gọi AuthService để lấy token JWT
                 var token = await _authService.LoginStudentAsync(request.Email, request.Password);
-                return Ok(new { Token = token });
+
+                // Lấy Student từ cơ sở dữ liệu
+                var student = await _userRepository.GetStudentByEmailAsync(request.Email);
+
+                // Trả về Token, Role và thông tin Student (trừ mật khẩu)
+                return Ok(new
+                {
+                    Token = token,
+                    Role = "Student",
+                    UserId = student?.Id,
+                    Name = student?.Name,
+                    Birthday = student?.Birthday,
+                    Email = student?.Email
+                });
             }
             catch (UnauthorizedAccessException)
             {

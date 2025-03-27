@@ -20,7 +20,7 @@ public class CourseController : ControllerBase
 
         // ✅ API: Lấy tất cả các lớp học
         [HttpGet]
-        [Authorize(Policy = "StudentOrAdmin")]  // Phân quyền cho Admin, và Student
+        // [Authorize(Policy = "StudentOrAdmin")] 
         public async Task<IActionResult> GetAllCourses()
         {
             var courses = await _courseService.GetAllCoursesAsync();

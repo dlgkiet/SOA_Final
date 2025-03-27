@@ -98,7 +98,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-// Thêm các d?ch v? c?a b?n
+// Thêm các dịch vụ 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
