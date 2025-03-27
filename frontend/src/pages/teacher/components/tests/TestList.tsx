@@ -45,16 +45,20 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
       {tests.length > 0 ? (
         <div className="space-y-4">
           {tests.map((test) => (
-            <div key={test.id} className="bg-white p-4 border rounded-lg shadow-md"> {/* Key duy nhất */}
-              <h4 className="text-xl font-medium mb-2">{test.content}</h4>
+            <div key={test.id} className="bg-white p-6 border rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out">
+              {/* Tiêu đề bài kiểm tra */}
+              <h4 className="text-xl font-semibold mb-2">{test.content}</h4>
+
+              {/* Thời gian hết hạn */}
               <p className="text-gray-500 text-sm mt-2">
                 Thời gian hết hạn: {new Date(test.deadline).toLocaleString()}
               </p>
 
-              <div className="flex gap-2 mt-4">
+              {/* Các nút chức năng: Tạo câu hỏi, Chỉnh sửa, Xóa */}
+              <div className="flex gap-4 mt-4 justify-end">
                 <button
                   onClick={() => handleCreateQuestion(test.id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  className="flex items-center gap-2 px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
                 >
                   <Plus size={16} />
                   Tạo câu hỏi
@@ -62,7 +66,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
 
                 <button
                   onClick={() => handleEditTest(test.id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
                   <Edit size={16} />
                   Chỉnh sửa
@@ -70,7 +74,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
 
                 <button
                   onClick={() => handleDeleteTest(test.id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                  className="flex items-center gap-2 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                 >
                   <Trash size={16} />
                   Xóa
@@ -80,7 +84,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
           ))}
         </div>
       ) : (
-        <p>Chưa có bài kiểm tra nào cho khóa học này.</p>
+        <p className="text-gray-500">Chưa có bài kiểm tra nào cho khóa học này.</p>
       )}
 
       {selectedTest && (
@@ -101,14 +105,13 @@ const EditTestModal = ({ isOpen, onClose, test, teacherId, courseId, onUpdateTes
   const [content, setContent] = useState(test.content);
   const [deadline, setDeadline] = useState(test.deadline);
 
-  // Chuyển đổi deadline thành định dạng hợp lệ cho datetime-local
   const formattedDeadline = new Date(deadline).toISOString().slice(0, 16);
 
   const handleSubmit = async () => {
     const updatedTest = {
-      id: test.id, // Thêm id bài kiểm tra vào request
+      id: test.id,
       content,
-      deadline: new Date(deadline).toISOString(), // Đảm bảo deadline đúng định dạng ISO
+      deadline: new Date(deadline).toISOString(),
       teacherId,
       courseId,
     };
@@ -141,7 +144,7 @@ const EditTestModal = ({ isOpen, onClose, test, teacherId, courseId, onUpdateTes
             <label className="block text-gray-700">Thời gian hết hạn</label>
             <input
               type="datetime-local"
-              value={formattedDeadline} // Đảm bảo deadline là định dạng hợp lệ
+              value={formattedDeadline}
               onChange={(e) => setDeadline(e.target.value)}
               className="w-full p-2 border rounded"
             />
