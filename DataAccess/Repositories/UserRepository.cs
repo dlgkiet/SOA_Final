@@ -98,5 +98,41 @@ namespace DataAccess.Repositories
             }
             return false;
         }
+
+        // Lấy Admin theo email
+        public async Task<Admin> GetAdminByEmailAsync(string email)
+        {
+            return await _context.Admins
+                .FirstOrDefaultAsync(admin => admin.Email == email);
+        }
+
+        // Lấy Teacher theo email
+        public async Task<Teacher> GetTeacherByEmailAsync(string email)
+        {
+            return await _context.Teachers
+                .FirstOrDefaultAsync(teacher => teacher.Email == email);
+        }
+
+        // Lấy Student theo email
+        public async Task<Student> GetStudentByEmailAsync(string email)
+        {
+            return await _context.Students
+                .FirstOrDefaultAsync(student => student.Email == email);
+        }
+
+        // Kiểm tra mật khẩu người dùng (Admin, Teacher, Student)
+        public async Task<bool> ValidatePasswordAsync(string email, string password)
+        {
+            var admin = await _context.Admins.FirstOrDefaultAsync(a => a.Email == email);
+            if (admin != null && admin.Password == password) return true;
+
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Email == email);
+            if (teacher != null && teacher.Password == password) return true;
+
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.Email == email);
+            if (student != null && student.Password == password) return true;
+
+            return false;  // Nếu không tìm thấy hoặc mật khẩu không khớp
+        }
     }
 }

@@ -19,6 +19,10 @@ namespace DataAccess.Context
         public DbSet<Test> Tests { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
 
+        public DbSet<Admin> Admins { get; set; }
+
+        public DbSet<LoginRequest> LoginRequests { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     }
 }

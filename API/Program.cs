@@ -6,6 +6,12 @@ using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Service.IServices;
 using Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;  // Để sử dụng TokenValidationParameters và SymmetricSecurityKey
+using System.Text;
+using Microsoft.Data.SqlClient;  // Để sử dụng Encoding
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +40,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+// Cấu hình JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],  // Thay bằng issuer thực tế của bạn
+            ValidAudience = builder.Configuration["Jwt:Audience"],  // Thay bằng audience thực tế của bạn
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))  // Secret key cho JWT
+        };
+    });
+
 // Thêm các d?ch v? c?a b?n
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -47,6 +70,10 @@ builder.Services.AddScoped<ILessonRepository, LessonRepository>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
+
+// Đăng ký AuthService vào DI container
+builder.Services.AddScoped<AuthService>();  
+
 
 var app = builder.Build();
 
