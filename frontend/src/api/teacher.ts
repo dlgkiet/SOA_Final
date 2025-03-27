@@ -133,7 +133,7 @@ export const fetchTestById = async (id: number) => {
 // Cập nhật bài kiểm tra
 export const updateTest = async (id: number, testData: any) => {
   try {
-    const response = await axiosInstance.put(`/tests/${id}`, testData);
+    const response = await axiosInstance.put(`/test/${id}`, testData);
     return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to update test');

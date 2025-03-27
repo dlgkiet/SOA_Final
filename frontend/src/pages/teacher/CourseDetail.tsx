@@ -52,6 +52,19 @@ const CourseDetail = () => {
     loadCourseData();
   }, [id]);
 
+
+  // Callback khi bài kiểm tra được chỉnh sửa
+  const handleUpdateTest = (testId: number, updatedTest: any) => {
+    setTests((prevTests) =>
+      prevTests.map((test) => (test.id === testId ? updatedTest : test))
+    ); // Cập nhật bài kiểm tra trong danh sách
+  };
+
+  // Callback khi bài kiểm tra bị xóa
+  const handleDeleteTest = (testId: number) => {
+    setTests((prevTests) => prevTests.filter((test) => test.id !== testId)); // Xóa bài kiểm tra khỏi danh sách
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -123,8 +136,13 @@ const CourseDetail = () => {
 
 
         {/* Bài kiểm tra */}
-        <TestList tests={tests} />
-
+        <TestList
+          tests={tests}
+          teacherId={teacherId}
+          courseId={Number(id)}
+          onUpdateTest={handleUpdateTest}
+          onDeleteTest={handleDeleteTest}
+        />
       </div>
     </Layout>
   );
