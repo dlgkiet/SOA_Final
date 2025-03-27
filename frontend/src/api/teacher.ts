@@ -54,3 +54,21 @@ export const fetchCourseById = async (id: number) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch course');
   }
 };
+
+export const fetchLessons = async (teacherId: number, courseId: number) => {
+  try {
+    // Gửi yêu cầu GET tới API với các tham số teacherId và courseId
+    const response = await axiosInstance.get('/lessons');
+
+    // Lọc dữ liệu sau khi nhận được response
+    const filteredLessons = response.data.filter((lesson: any) => {
+      return lesson.teacherId === teacherId && lesson.courseId === courseId;
+    });
+
+    // Trả về dữ liệu đã lọc
+    return filteredLessons;
+  } catch (error: any) {
+    // Xử lý lỗi nếu có
+    throw new Error(error.response?.data?.message || 'Failed to fetch lessons');
+  }
+};

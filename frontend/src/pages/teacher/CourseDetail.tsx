@@ -1,4 +1,4 @@
-import { fetchCourseById } from "@/api/teacher";
+import { fetchCourseById, fetchLessons } from "@/api/teacher";
 import Layout from "@/components/layouts";
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';  // Import useParams từ react-router-dom
@@ -8,16 +8,26 @@ const CourseDetail = () => {
 
   const { id } = useParams();  // Lấy ID khóa học từ URL (tham số :id)
   const [course, setCourse] = useState<any>(null);
+  const [lessons, setLessons] = useState<any[]>([]); // Dữ liệu bài học
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const teacherid = 2;
 
   useEffect(() => {
     const loadCourseData = async () => {
       if (!id) return;  // Kiểm tra nếu không có ID
+      
 
       try {
         const courseData = await fetchCourseById(Number(id));  // Gọi API lấy khóa học
         setCourse(courseData);  // Lưu thông tin khóa học vào state
+
+        
+        const lessonsData = await fetchLessons(teacherid, Number(id)); // Giả sử teacherId có trong course
+        setLessons(lessonsData); // Lưu dữ liệu bài học vào state
+
+        console.log(lessonsData);
       } catch (err: any) {
         setError('Lỗi tải khóa học: ' + err.message);
       } finally {
@@ -31,36 +41,9 @@ const CourseDetail = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+ 
 
-  const lessons = [
-    {
-      id: 1,
-      content: 'Giới thiệu về HTML và CSS: Làm quen với các thẻ HTML cơ bản và cách tạo các trang web tĩnh.',
-      file: 'https://example.com/lesson1.pdf', // Liên kết tới bài học (có thể là file PDF, DOCX, v.v.)
-      createdAt: '2025-03-05T10:30:00',
-      updatedAt: '2025-03-06T12:45:00',
-      teacherId: 2,
-      courseId: 1,
-    },
-    {
-      id: 2,
-      content: 'Lập trình JavaScript cơ bản: Giới thiệu về JavaScript, cách sử dụng biến, hàm, vòng lặp và điều kiện.',
-      file: 'https://example.com/lesson2.pdf',
-      createdAt: '2025-03-06T11:00:00',
-      updatedAt: '2025-03-07T14:00:00',
-      teacherId: 2,
-      courseId: 1,
-    },
-    {
-      id: 3,
-      content: 'Giới thiệu về React: Làm quen với thư viện React, cách tạo các component và quản lý trạng thái trong ứng dụng.',
-      file: 'https://example.com/lesson3.pdf',
-      createdAt: '2025-03-10T15:00:00',
-      updatedAt: '2025-03-11T17:00:00',
-      teacherId: 2,
-      courseId: 1,
-    },
-  ];
+
   const tests = [
     {
       id: 1,
