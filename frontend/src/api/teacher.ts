@@ -73,12 +73,18 @@ export const fetchLessons = async (teacherId: number, courseId: number) => {
   }
 };
 
-// Lấy tất cả các bài kiểm tra
-export const fetchTests = async () => {
+export const fetchTests = async (courseId: number) => {
   try {
-    const response = await axiosInstance.get('/tests');
-    return response.data;  // Trả về danh sách bài kiểm tra
+    // Gửi yêu cầu GET tới API để lấy tất cả các bài kiểm tra
+    const response = await axiosInstance.get('/Test');
+    
+    // Lọc bài kiểm tra theo courseId
+    const filteredTests = response.data.filter((test: any) => test.courseId === courseId);
+    
+    // Trả về danh sách bài kiểm tra đã lọc
+    return filteredTests;
   } catch (error: any) {
+    // Xử lý lỗi nếu có
     throw new Error(error.response?.data?.message || 'Failed to fetch tests');
   }
 };

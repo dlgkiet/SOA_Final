@@ -1,4 +1,4 @@
-import { fetchCourseById, fetchLessons } from "@/api/teacher";
+import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher";
 import Layout from "@/components/layouts";
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';  // Import useParams từ react-router-dom
@@ -11,8 +11,10 @@ const CourseDetail = () => {
   const [lessons, setLessons] = useState<any[]>([]); // Dữ liệu bài học
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [tests, setTests] = useState<any[]>([]); // Dữ liệu bài kiểm tra
 
-  const teacherid = 2;
+
+  const teacherId = 2;
 
   useEffect(() => {
     const loadCourseData = async () => {
@@ -24,12 +26,12 @@ const CourseDetail = () => {
         setCourse(courseData);  // Lưu thông tin khóa học vào state
 
         
-        const lessonsData = await fetchLessons(teacherid, Number(id)); // Giả sử teacherId có trong course
+        const lessonsData = await fetchLessons(teacherId, Number(id)); // Giả sử teacherId có trong course
         setLessons(lessonsData); // Lưu dữ liệu bài học vào state
 
-        console.log(lessonsData);
-      } catch (err: any) {
-        setError('Lỗi tải khóa học: ' + err.message);
+          // Lấy bài kiểm tra
+          const testsData = await fetchTests(Number(id));
+          setTests(testsData);      } catch (err: any) {
       } finally {
         setLoading(false);
       }
@@ -40,31 +42,7 @@ const CourseDetail = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-
- 
-
-
-  const tests = [
-    {
-      id: 1,
-      content: 'Bài kiểm tra giữa kỳ: Kiểm tra kiến thức về HTML, CSS và JavaScript cơ bản.',
-      studentId: 101, // Giả sử học sinh có ID = 101
-      teacherId: 2,
-      deadline: '2025-04-01T23:59:59',
-      courseId: 1,
-    },
-    {
-      id: 2,
-      content: 'Bài kiểm tra cuối kỳ: Kiểm tra kiến thức về JavaScript nâng cao và React.',
-      studentId: 102, // Giả sử học sinh có ID = 102
-      teacherId: 2,
-      deadline: '2025-06-01T23:59:59',
-      courseId: 1,
-    },
-  ];
-    
-
-  // const students : any = [];
+  
 
   return (
 <Layout>
