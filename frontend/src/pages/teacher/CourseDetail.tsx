@@ -1,11 +1,10 @@
-import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher";
-import Layout from "@/components/layouts";
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
-import CreateTestModal from "./components/CreateTestModal";
+import { useParams } from "react-router-dom";
+import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher";  // API lấy khóa học, bài học và bài kiểm tra
+import Layout from "@/components/layouts";
+import CreateTestModal from "./components/CreateTestModal"; // Modal tạo bài kiểm tra
 
 const CourseDetail = () => {
-
   const { id } = useParams();  // Lấy ID khóa học từ URL (tham số :id)
   const [course, setCourse] = useState<any>(null);
   const [lessons, setLessons] = useState<any[]>([]); // Dữ liệu bài học
@@ -14,9 +13,14 @@ const CourseDetail = () => {
   const [tests, setTests] = useState<any[]>([]); // Dữ liệu bài kiểm tra
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Trạng thái modal
 
+  const teacherId = 2;  // Giả sử teacherId là 2
 
-  const teacherId = 2;
+  // Callback khi bài kiểm tra mới được thêm
+  const handleAddTest = (newTest: any) => {
+    setTests((prevTests) => [...prevTests, newTest]); // Cập nhật danh sách bài kiểm tra
+  };
 
+  // Fetch dữ liệu khóa học, bài học và bài kiểm tra khi component mount hoặc id thay đổi
   useEffect(() => {
     const loadCourseData = async () => {
       if (!id) return;
@@ -74,6 +78,7 @@ const CourseDetail = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}  // Đóng modal
           courseId={Number(id)}  // Truyền ID khóa học vào modal
+          onAddTest={handleAddTest} // Truyền hàm callback để cập nhật danh sách
         />
 
         {/* Bài học */}

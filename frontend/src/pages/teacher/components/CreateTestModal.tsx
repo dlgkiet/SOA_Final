@@ -1,4 +1,3 @@
-// components/CreateTestModal.tsx
 import { useState } from "react";
 import { createTest } from "@/api/teacher"; // Đảm bảo bạn đã tạo hàm createTest trong file api
 
@@ -6,9 +5,10 @@ interface CreateTestModalProps {
   isOpen: boolean;
   onClose: () => void;
   courseId: number;
+  onAddTest: (newTest: any) => void; // Callback để truyền bài kiểm tra mới cho component cha
 }
 
-const CreateTestModal = ({ isOpen, onClose, courseId }: CreateTestModalProps) => {
+const CreateTestModal = ({ isOpen, onClose, courseId, onAddTest }: CreateTestModalProps) => {
   const [content, setContent] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
 
@@ -20,7 +20,7 @@ const CreateTestModal = ({ isOpen, onClose, courseId }: CreateTestModalProps) =>
 
     const testData = {
       content,
-      teacherId: 2,  // Giả sử teacherId là 2
+      teacherId: 2, // Giả sử teacherId là 2
       deadline: new Date(deadline).toISOString(), // Đảm bảo thời gian là UTC
       courseId,
     };
@@ -28,6 +28,7 @@ const CreateTestModal = ({ isOpen, onClose, courseId }: CreateTestModalProps) =>
     try {
       const response = await createTest(testData); // Gọi API tạo bài kiểm tra
       console.log("Test created successfully:", response);
+      onAddTest(response); // Truyền bài kiểm tra mới cho component cha
       onClose(); // Đóng modal sau khi tạo bài kiểm tra thành công
     } catch (error: any) {
       console.error("Failed to create test:", error.message);
