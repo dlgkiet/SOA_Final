@@ -78,9 +78,6 @@ const CourseDetail = () => {
           >
             Tạo bài kiểm tra mới
           </button>
-          <button className="bg-orange-400 text-white px-4 py-2 rounded hover:bg-orange-600">
-            Danh sách sinh viên của lớp
-          </button>
         </div>
 
         {/* Modal tạo bài kiểm tra mới */}
@@ -106,8 +103,7 @@ const CourseDetail = () => {
             <div className="space-y-4">
               {lessons.map((lesson) => (
                 <div key={lesson.id} className="bg-white p-4 border rounded-lg shadow-md">
-                  <h4 className="text-xl font-medium mb-2">Bài học {lesson.id}</h4>
-                  <p className="text-gray-700">{lesson.content}</p>
+                  <h4 className="text-xl font-medium mb-2">{lesson.content}</h4>  {/* Tiêu đề là nội dung bài học */}
                   {lesson.file && (
                     <a href={lesson.file} target="_blank" className="text-blue-600 mt-2 block">
                       Tải bài học (PDF, DOCX, v.v.)
@@ -124,6 +120,7 @@ const CourseDetail = () => {
           )}
         </div>
 
+
         {/* Bài kiểm tra */}
         <div className="mb-8">
           <h3 className="text-2xl font-semibold mb-4">Bài kiểm tra</h3>
@@ -131,8 +128,10 @@ const CourseDetail = () => {
             <div className="space-y-4">
               {tests.map((test) => (
                 <div key={test.id} className="bg-white p-4 border rounded-lg shadow-md">
-                  <h4 className="text-xl font-medium mb-2">Bài kiểm tra {test.id}</h4>
-                  <p className="text-gray-700">{test.content}</p>
+                  {/* Tiêu đề bài kiểm tra là nội dung bài kiểm tra */}
+                  <h4 className="text-xl font-medium mb-2">{test.content}</h4>  {/* Tiêu đề là nội dung của bài kiểm tra */}
+
+                  {/* Hiển thị thời gian hết hạn */}
                   <p className="text-gray-500 text-sm mt-2">
                     Thời gian hết hạn: {new Date(test.deadline).toLocaleString()}
                   </p>
@@ -143,6 +142,7 @@ const CourseDetail = () => {
             <p>Chưa có bài kiểm tra nào cho khóa học này.</p>
           )}
         </div>
+
       </div>
     </Layout>
   );
