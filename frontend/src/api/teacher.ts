@@ -1,6 +1,6 @@
 
 import axiosInstance from '../utils/axiosInstance';
-
+//=====================================COURSE================================================
 export const fetchCourses = async () => {
   try {
     const response = await axiosInstance.get('/courses');
@@ -55,6 +55,11 @@ export const fetchCourseById = async (id: number) => {
   }
 };
 
+//=====================================END-COURSE================================================
+
+
+
+//=====================================LESSONS================================================
 export const fetchLessons = async (teacherId: number, courseId: number) => {
   try {
     const response = await axiosInstance.get('/lessons');
@@ -68,6 +73,20 @@ export const fetchLessons = async (teacherId: number, courseId: number) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch lessons');
   }
 };
+
+export const createLesson = async (lessonData: any) => {
+  try {
+    const response = await axiosInstance.post('/lessons', lessonData);
+    return response.data; 
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to create lesson');
+  }
+};
+
+
+//=====================================END-LESSONS================================================
+
+//=====================================TEST================================================
 
 export const fetchTests = async (courseId: number) => {
   try {
@@ -114,9 +133,11 @@ export const createTest = async (testData: any) => {
 // Xóa bài kiểm tra
 export const deleteTest = async (id: number) => {
   try {
-    const response = await axiosInstance.delete(`/tests/${id}`);
+    const response = await axiosInstance.delete(`/test/${id}`);
     return response.data;  
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to delete test');
   }
 };
+
+//=====================================END - TEST================================================

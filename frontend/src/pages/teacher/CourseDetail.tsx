@@ -1,23 +1,30 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher";  // API lấy khóa học, bài học và bài kiểm tra
+import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher"; // API lấy khóa học, bài học và bài kiểm tra
 import Layout from "@/components/layouts";
 import CreateTestModal from "./components/CreateTestModal"; // Modal tạo bài kiểm tra
+import CreateLessonModal from "./components/CreateLessonModal"; // Modal tạo bài học
 
 const CourseDetail = () => {
-  const { id } = useParams();  // Lấy ID khóa học từ URL (tham số :id)
+  const { id } = useParams(); // Lấy ID khóa học từ URL (tham số :id)
   const [course, setCourse] = useState<any>(null);
   const [lessons, setLessons] = useState<any[]>([]); // Dữ liệu bài học
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [tests, setTests] = useState<any[]>([]); // Dữ liệu bài kiểm tra
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Trạng thái modal
+  const [isTestModalOpen, setIsTestModalOpen] = useState<boolean>(false); // Trạng thái modal tạo bài kiểm tra
+  const [isLessonModalOpen, setIsLessonModalOpen] = useState<boolean>(false); // Trạng thái modal tạo bài học
 
-  const teacherId = 2;  // Giả sử teacherId là 2
+  const teacherId = 2; // Giả sử teacherId là 2
 
   // Callback khi bài kiểm tra mới được thêm
   const handleAddTest = (newTest: any) => {
     setTests((prevTests) => [...prevTests, newTest]); // Cập nhật danh sách bài kiểm tra
+  };
+
+  // Callback khi bài học mới được thêm
+  const handleAddLesson = (newLesson: any) => {
+    setLessons((prevLessons) => [...prevLessons, newLesson]); // Cập nhật danh sách bài học
   };
 
   // Fetch dữ liệu khóa học, bài học và bài kiểm tra khi component mount hoặc id thay đổi
@@ -35,7 +42,7 @@ const CourseDetail = () => {
         const testsData = await fetchTests(Number(id));
         setTests(testsData);
       } catch (err: any) {
-        setError('Lỗi tải dữ liệu: ' + err.message);
+        setError("Lỗi tải dữ liệu: " + err.message);
       } finally {
         setLoading(false);
       }
@@ -59,12 +66,15 @@ const CourseDetail = () => {
 
         {/* Nút tạo bài học và bài kiểm tra mới */}
         <div className="flex gap-4 mb-6">
-          <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            onClick={() => setIsLessonModalOpen(true)} // Mở modal khi nhấn nút "Tạo bài học mới"
+          >
             Tạo bài học mới
           </button>
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={() => setIsModalOpen(true)} // Mở modal khi nhấn nút "Tạo bài kiểm tra mới"
+            onClick={() => setIsTestModalOpen(true)} // Mở modal khi nhấn nút "Tạo bài kiểm tra mới"
           >
             Tạo bài kiểm tra mới
           </button>
@@ -75,10 +85,18 @@ const CourseDetail = () => {
 
         {/* Modal tạo bài kiểm tra mới */}
         <CreateTestModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}  // Đóng modal
-          courseId={Number(id)}  // Truyền ID khóa học vào modal
+          isOpen={isTestModalOpen}
+          onClose={() => setIsTestModalOpen(false)} // Đóng modal
+          courseId={Number(id)} // Truyền ID khóa học vào modal
           onAddTest={handleAddTest} // Truyền hàm callback để cập nhật danh sách
+        />
+
+        {/* Modal tạo bài học mới */}
+        <CreateLessonModal
+          isOpen={isLessonModalOpen}
+          onClose={() => setIsLessonModalOpen(false)} // Đóng modal
+          courseId={Number(id)} // Truyền ID khóa học vào modal
+          onAddLesson={handleAddLesson} // Truyền hàm callback để cập nhật danh sách bài học
         />
 
         {/* Bài học */}
