@@ -57,6 +57,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
+builder.Services.AddAuthorization(options =>
+{
+    // Thêm các chính sách phân quyền
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("TeacherOrAdmin", policy => policy.RequireRole("Teacher", "Admin"));
+    options.AddPolicy("StudentOrAdmin", policy => policy.RequireRole("Student", "Admin"));
+});
+
+
 // Thêm các d?ch v? c?a b?n
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -89,7 +99,9 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 
-app.UseAuthorization();
+// Cấu hình middleware
+app.UseAuthentication(); // Xác thực JWT
+app.UseAuthorization();  // Phân quyền
 
 app.MapControllers();
 
