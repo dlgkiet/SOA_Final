@@ -5,13 +5,13 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const studentNavLinks = [
   { title: "Khóa học", href: "/courses" },
-  { title: "Lớp học", href: "/classrooms" },
+  { title: "Lớp học", href: "/teacher/courses" },
   { title: "Bài tập", href: "/assignments" },
   { title: "Lịch học", href: "/schedule" },
 ];
 
 const teacherNavLinks = [
-  { title: "Quản lý khóa học", href: "/manage-courses" },
+  { title: "Quản lý khóa học", href: "/teacher/courses" },
   { title: "Quản lý lớp học", href: "/manage-classrooms" },
   { title: "Chấm bài", href: "/grading" },
   { title: "Thống kê", href: "/statistics" },

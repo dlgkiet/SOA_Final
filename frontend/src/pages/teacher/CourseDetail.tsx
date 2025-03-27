@@ -1,3 +1,4 @@
+import Layout from "@/components/layouts";
 
 const CourseDetail = () => {
 
@@ -62,7 +63,8 @@ const CourseDetail = () => {
   // const students : any = [];
 
   return (
-    <div className="container mx-auto p-6">
+<Layout>
+<div className="container mx-auto p-6">
   {/* Header khóa học */}
   <div className="mb-6">
     <h2 className="text-3xl font-bold">{course.name}</h2>
@@ -129,6 +131,7 @@ const CourseDetail = () => {
     )}
   </div>
 </div>
+</Layout>
 
   );
 };

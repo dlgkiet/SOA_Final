@@ -5,6 +5,7 @@ import EditCourseForm from './components/EditCourseForm';
 import { updateCourse, createCourse, deleteCourse } from '@/api/teacher';  // Import thêm createCourse
 import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 import { Link } from 'react-router-dom';
+import Layout from '@/components/layouts';
 
 const CourseList = () => {
   const teacherId = 2;
@@ -108,7 +109,9 @@ const handleDeleteClick = async (courseId: number) => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="container mx-auto p-6">
+
+    <Layout>
+ <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Lớp đang dạy</h2>
 
@@ -178,6 +181,8 @@ const handleDeleteClick = async (courseId: number) => {
         </div>
       )}
     </div>
+    </Layout>
+   
   );
 };
 
