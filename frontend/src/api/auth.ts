@@ -1,20 +1,25 @@
 import axiosInstance from "@/utils/axiosInstance";
 
-interface LoginRequest {
+interface ILoginRequest {
   email: string;
   password: string;
 }
 
-interface LoginResponse {
+interface ILoginResponse {
+  userId: number;
+  name: string | null | undefined;
+  email: string | undefined;
+  birthday: Date | undefined;
+  role: string | undefined;
   token: string;
 }
 
 // Đăng nhập Admin
 export const loginAdmin = async (
-  data: LoginRequest
-): Promise<LoginResponse | null> => {
+  data: ILoginRequest
+): Promise<ILoginResponse | null> => {
   try {
-    const response = await axiosInstance.post<LoginResponse>(
+    const response = await axiosInstance.post<ILoginResponse>(
       "/login/admin",
       data
     );
@@ -27,10 +32,10 @@ export const loginAdmin = async (
 
 // Đăng nhập Teacher
 export const loginTeacher = async (
-  data: LoginRequest
-): Promise<LoginResponse | null> => {
+  data: ILoginRequest
+): Promise<ILoginResponse | null> => {
   try {
-    const response = await axiosInstance.post<LoginResponse>(
+    const response = await axiosInstance.post<ILoginResponse>(
       "/login/teacher",
       data
     );
@@ -43,10 +48,10 @@ export const loginTeacher = async (
 
 // Đăng nhập Student
 export const loginStudent = async (
-  data: LoginRequest
-): Promise<LoginResponse | null> => {
+  data: ILoginRequest
+): Promise<ILoginResponse | null> => {
   try {
-    const response = await axiosInstance.post<LoginResponse>(
+    const response = await axiosInstance.post<ILoginResponse>(
       "/login/student",
       data
     );
@@ -54,5 +59,15 @@ export const loginStudent = async (
   } catch (error) {
     console.error("Student login failed", error);
     return null;
+  }
+};
+
+export const logout = async () => {
+  try {
+    await axiosInstance.post("/login/logout");
+    return true;
+  } catch (error) {
+    console.error("Logout failed", error);
+    return false;
   }
 };

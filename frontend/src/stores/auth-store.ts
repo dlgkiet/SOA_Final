@@ -1,13 +1,11 @@
 import { devtools, persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand";
-import { ILoginData } from "@/services/api/auth/auth";
 import { createSelectors } from "@/lib/utils";
+import { ILoginData } from "@/types/global";
 
 interface AuthStore {
   _ui: ILoginData | null;
   _ia: boolean;
-  _r: Array<string>;
-  _p: Array<string>;
   setUserInformation: (partialState: Partial<ILoginData>) => void;
   setIsAuthenticated: (value: boolean) => void;
   resetUserInformation: () => void;
@@ -20,8 +18,6 @@ export const useAuthStore = createSelectors(
         (set, get) => ({
           _ui: null,
           _ia: false,
-          _r: [],
-          _p: [],
           setUserInformation: (partialState) => {
             set((state) => ({
               _ui: state._ui
@@ -38,8 +34,6 @@ export const useAuthStore = createSelectors(
             set(() => ({
               _ui: null,
               _ia: false,
-              _r: [],
-              _p: [],
             }));
           },
         }),

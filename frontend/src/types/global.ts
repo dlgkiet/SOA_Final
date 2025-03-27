@@ -7,3 +7,11 @@ export interface IApiResponse<T = {}> {
 export interface IErrorResponse {
   message: string;
 }
+
+export interface ILoginData {
+  userId: number
+  name: string | null
+  email: string
+  birthday: Date
+  role: string
+}

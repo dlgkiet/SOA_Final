@@ -1,23 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginBackground from "@/assets/images/teacher-login-background.jpg";
+import { loginTeacher } from "@/api/auth";
+import { useAuthStore } from "@/stores/auth-store";
+import { useShallow } from "zustand/react/shallow";
+import Cookies from "js-cookie";
 
 export default function TeacherLogin() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { _ia, setUserInformation, setIsAuthenticated } = useAuthStore(
+    useShallow((state) => state)
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    // e.preventDefault();
-    // loginMutate({ email: inputs.email, password: inputs.password });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    const response = await loginTeacher(inputs);
+    if (response) {
+      Cookies.set("AuthToken", response.token, { expires: 1, path: "/" }); // Lưu token vào cookie
+      setIsAuthenticated(true);
+
+      setUserInformation({
+        userId: response.userId,
+        name: response.name,
+        birthday: response.birthday,
+        email: response.email,
+        role: response.role,
+      });
+
+      navigate("/");
+    } else {
+      setError("Email hoặc mật khẩu không đúng!");
+    }
+
+    setIsLoading(false);
   };
+  
+  
+  
+    useEffect(() => {
+      if (_ia) {
+        navigate('/', { replace: true })
+      }
+    }, [_ia, navigate])
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -32,10 +72,12 @@ export default function TeacherLogin() {
           <h2 className="text-3xl font-bold text-gray-800">Đăng nhập</h2>
           <p className="text-gray-500 mb-6">Đăng nhập dành cho giảng viên</p>
 
+          {error && <p className="text-red-500">{error}</p>} {/* Hiển thị lỗi */}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input type="text" name="email" value={inputs.email} onChange={handleChange} required />
+              <Input type="email" name="email" value={inputs.email} onChange={handleChange} required />
             </div>
 
             <div className="space-y-2">
@@ -48,9 +90,8 @@ export default function TeacherLogin() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" /* disabled={isLoginLoading} */>
-              {/* {isLoginLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Đăng nhập"} */}
-              Đăng nhập
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Đăng nhập"}
             </Button>
           </form>
         </div>

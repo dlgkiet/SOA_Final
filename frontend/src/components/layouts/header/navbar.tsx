@@ -1,7 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useAuthStore } from "@/stores/auth-store";
 
 const navLinks = {
   student: [
@@ -24,11 +25,14 @@ const navLinks = {
 };
 
 const Navbar = () => {
-  const storedUser = localStorage.getItem("user");
-  const user: { role: "student" | "teacher" | "admin" } | null = storedUser ? JSON.parse(storedUser) : null;
-  const role = user?.role ?? "student"; // Mặc định là student nếu không có role
+  const { _ui } = useAuthStore();
+  const role = (_ui?.role as "student" | "teacher" | "admin") || "student";
+  console.log(role);
 
-  const navigationLinks = useMemo(() => navLinks[role] || [], [role]);
+  const navigationLinks = navLinks[role] || [];
+
+  console.log("Role:", role);
+  console.log("Navigation Links:", navigationLinks);
 
   return (
     <ScrollArea className="w-full whitespace-nowrap rounded-md pb-0">
@@ -40,7 +44,7 @@ const Navbar = () => {
               asChild
               className="hover:bg-transparent pl-0 hover:font-semibold focus-visible:!ring-0 focus-visible:!ring-transparent"
             >
-              <Link to="/dashboard">Tổng quan</Link>
+              <Link to="/">Trang chủ</Link>
             </Button>
 
             {navigationLinks.map((item, idx) => (
