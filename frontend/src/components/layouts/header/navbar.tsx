@@ -5,14 +5,13 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const studentNavLinks = [
   { title: "Khóa học", href: "/courses" },
-  { title: "Lớp học", href: "/teacher/courses" },
+  { title: "Lớp học", href: "/classrooms" },
   { title: "Bài tập", href: "/assignments" },
   { title: "Lịch học", href: "/schedule" },
 ];
 
 const teacherNavLinks = [
   { title: "Quản lý khóa học", href: "/teacher/courses" },
-  { title: "Quản lý lớp học", href: "/manage-classrooms" },
   { title: "Chấm bài", href: "/grading" },
   { title: "Thống kê", href: "/statistics" },
 ];
@@ -20,7 +19,7 @@ const teacherNavLinks = [
 const Navbar = () => {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  const role = user?.role ?? "student"; // Mặc định là student nếu không có role
+  const role = user?.role ?? "teacher"; // Mặc định là student nếu không có role
 
   const navigationLinks = useMemo(
     () => (role === "teacher" ? teacherNavLinks : studentNavLinks),

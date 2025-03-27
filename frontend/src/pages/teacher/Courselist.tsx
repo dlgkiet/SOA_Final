@@ -113,7 +113,7 @@ const handleDeleteClick = async (courseId: number) => {
     <Layout>
  <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Lớp đang dạy</h2>
+        <h2 className="text-2xl font-semibold">Các Khóa học đang dạy</h2>
 
         {/* Nút tạo khóa học */}
         <button

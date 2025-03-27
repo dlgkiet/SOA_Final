@@ -1,15 +1,36 @@
+import { fetchCourseById } from "@/api/teacher";
 import Layout from "@/components/layouts";
+import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';  // Import useParams từ react-router-dom
+
 
 const CourseDetail = () => {
 
-  const course = {
-    id: 1,
-    name: 'Lập trình Web',
-    description: 'Khóa học này sẽ dạy về lập trình web từ cơ bản đến nâng cao. Bạn sẽ học HTML, CSS, JavaScript, React, và cách phát triển ứng dụng web thực tế.',
-    schedule: 'Thứ 2, 4, 6 - 18:00',
-    teacherId: 2, // Giả sử có giảng viên với ID = 2
-    createdAt: '2025-03-01T10:00:00',
-  };
+  const { id } = useParams();  // Lấy ID khóa học từ URL (tham số :id)
+  const [course, setCourse] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadCourseData = async () => {
+      if (!id) return;  // Kiểm tra nếu không có ID
+
+      try {
+        const courseData = await fetchCourseById(Number(id));  // Gọi API lấy khóa học
+        setCourse(courseData);  // Lưu thông tin khóa học vào state
+      } catch (err: any) {
+        setError('Lỗi tải khóa học: ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCourseData();
+  }, [id]);  // Khi ID thay đổi (ví dụ: người dùng mở khóa học khác), gọi lại useEffect
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
 
   const lessons = [
     {

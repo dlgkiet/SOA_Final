@@ -45,3 +45,12 @@ export const deleteCourse = async (id: number) => {
     throw new Error(error.response?.data?.message || 'Failed to delete course');
   }
 };
+
+export const fetchCourseById = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/courses/${id}`);
+    return response.data;  // Trả về thông tin khóa học
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch course');
+  }
+};
