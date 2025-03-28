@@ -25,9 +25,11 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
 
   // Handle creating a question for a test
   const handleCreateQuestion = (testId: number) => {
-    console.log('Tạo câu hỏi cho bài kiểm tra', testId);
-    setIsCreateQuestionModalOpen(true); // Open modal for creating questions
+    console.log('Tạo câu hỏi cho bài kiểm tra', testId); // Kiểm tra testId ở đây
+    setSelectedTest(tests.find((test) => test.id === testId) || null); // Cập nhật selectedTest đúng cách
+    setIsCreateQuestionModalOpen(true); // Mở modal tạo câu hỏi
   };
+
 
   // Handle editing a test
   const handleEditTest = (testId: number) => {

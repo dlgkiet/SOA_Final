@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/auth-store";
 import { useState } from "react";
 
 interface Question {
@@ -13,9 +14,10 @@ interface CreateQuestionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (questions: Question[] | any) => void; // Accepts an array of questions or JSON data
+  testId: Number
 }
 
-const CreateQuestionModal = ({ isOpen, onClose, onSubmit }: CreateQuestionModalProps) => {
+const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId }: CreateQuestionModalProps) => {
   const [isJsonMode, setIsJsonMode] = useState(false); // Toggle between JSON mode and manual input
   const [question, setQuestion] = useState<Question>({
     content: "",
@@ -25,6 +27,13 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit }: CreateQuestionModalP
     optionD: "",
     correctAnswer: "",
   });
+
+  const { _ui } = useAuthStore();
+
+  const teacherId = _ui?.userId;
+
+  console.log("TeacherId", teacherId);
+  console.log("TestId", testId);
 
   const [jsonInput, setJsonInput] = useState(""); // JSON input for multiple questions
 
