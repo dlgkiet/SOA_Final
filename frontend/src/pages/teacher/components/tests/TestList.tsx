@@ -36,6 +36,10 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
     setIsEditModalOpen(true); // Open edit modal
   };
 
+  const handleAddQuestion = () => {
+    console.log("ok")
+  }
+
   // Handle deleting a test
   const handleDeleteTest = async (testId: number) => {
     try {
@@ -112,6 +116,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
           isOpen={isCreateQuestionModalOpen}
           onClose={() => setIsCreateQuestionModalOpen(false)}
           testId={selectedTest?.id || 0}
+          onSubmit={handleAddQuestion}  // Đảm bảo hàm này được truyền vào đúng cách
         />
       )}
     </div>

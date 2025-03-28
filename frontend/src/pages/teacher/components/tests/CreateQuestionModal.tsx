@@ -34,6 +34,7 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit }: CreateQuestionModalP
         const parsedQuestions = JSON.parse(jsonInput);
         if (Array.isArray(parsedQuestions)) {
           onSubmit(parsedQuestions); // Submit array of questions in JSON format
+          setJsonInput(""); // Clear the JSON input field
           onClose(); // Close modal
         }
       } catch (error) {
@@ -41,7 +42,15 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit }: CreateQuestionModalP
       }
     } else {
       onSubmit([question]); // Submit a single question
-      onClose(); // Close modal
+      // Clear fields for new input and keep the modal open
+      setQuestion({
+        content: "",
+        optionA: "",
+        optionB: "",
+        optionC: "",
+        optionD: "",
+        correctAnswer: "",
+      }); // Clear input fields to continue entering new question
     }
   };
 
@@ -125,14 +134,50 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit }: CreateQuestionModalP
                   className="w-full p-2 border rounded-md"
                 />
               </div>
+
+              {/* Correct Answer with Radio Buttons */}
               <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Correct Answer"
-                  value={question.correctAnswer}
-                  onChange={(e) => setQuestion({ ...question, correctAnswer: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
+                <p className="text-gray-700">Chọn câu trả lời đúng:</p>
+                <label className="block">
+                  <input
+                    type="radio"
+                    value="A"
+                    checked={question.correctAnswer === "A"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "A" })}
+                    className="mr-2"
+                  />
+                  Option A
+                </label>
+                <label className="block">
+                  <input
+                    type="radio"
+                    value="B"
+                    checked={question.correctAnswer === "B"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "B" })}
+                    className="mr-2"
+                  />
+                  Option B
+                </label>
+                <label className="block">
+                  <input
+                    type="radio"
+                    value="C"
+                    checked={question.correctAnswer === "C"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "C" })}
+                    className="mr-2"
+                  />
+                  Option C
+                </label>
+                <label className="block">
+                  <input
+                    type="radio"
+                    value="D"
+                    checked={question.correctAnswer === "D"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "D" })}
+                    className="mr-2"
+                  />
+                  Option D
+                </label>
               </div>
             </div>
           )}
@@ -149,7 +194,7 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit }: CreateQuestionModalP
               onClick={handleSubmit}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              Lưu
+              Lưu và tạo câu hỏi mới
             </button>
           </div>
         </div>
