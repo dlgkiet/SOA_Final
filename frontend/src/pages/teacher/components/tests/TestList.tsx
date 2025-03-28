@@ -30,6 +30,8 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
     setIsCreateQuestionModalOpen(true); // Mở modal tạo câu hỏi
   };
 
+  console.log(selectedTest)
+
 
   // Handle editing a test
   const handleEditTest = (testId: number) => {
@@ -118,6 +120,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
           isOpen={isCreateQuestionModalOpen}
           onClose={() => setIsCreateQuestionModalOpen(false)}
           testId={selectedTest?.id || 0}
+          modalTitle={selectedTest?.content}
           onSubmit={handleAddQuestion}  // Đảm bảo hàm này được truyền vào đúng cách
         />
       )}

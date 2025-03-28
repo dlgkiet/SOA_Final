@@ -15,9 +15,10 @@ interface CreateQuestionModalProps {
   onClose: () => void;
   onSubmit: (questions: Question[] | any) => void; // Accepts an array of questions or JSON data
   testId: Number
+  modalTitle?: string; // Title of the modal, defaults to "Tạo câu hỏi mới"
 }
 
-const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId }: CreateQuestionModalProps) => {
+const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId, modalTitle }: CreateQuestionModalProps) => {
   const [isJsonMode, setIsJsonMode] = useState(false); // Toggle between JSON mode and manual input
   const [question, setQuestion] = useState<Question>({
     content: "",
@@ -67,7 +68,7 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId }: CreateQuesti
     isOpen && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded-lg w-full max-w-md">
-          <h2 className="text-2xl font-semibold mb-4">Tạo câu hỏi mới</h2>
+          <h2 className="text-2xl font-semibold mb-4">{modalTitle}</h2>
 
           {/* Toggle between modes */}
           <div className="flex gap-4 mb-4">
