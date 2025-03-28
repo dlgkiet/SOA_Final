@@ -145,48 +145,50 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId }: CreateQuesti
               </div>
 
               {/* Correct Answer with Radio Buttons */}
-              <div className="mb-4">
-                <p className="text-gray-700">Chọn câu trả lời đúng:</p>
-                <label className="block">
-                  <input
-                    type="radio"
-                    value="A"
-                    checked={question.correctAnswer === "A"}
-                    onChange={() => setQuestion({ ...question, correctAnswer: "A" })}
-                    className="mr-2"
-                  />
-                  Option A
-                </label>
-                <label className="block">
-                  <input
-                    type="radio"
-                    value="B"
-                    checked={question.correctAnswer === "B"}
-                    onChange={() => setQuestion({ ...question, correctAnswer: "B" })}
-                    className="mr-2"
-                  />
-                  Option B
-                </label>
-                <label className="block">
-                  <input
-                    type="radio"
-                    value="C"
-                    checked={question.correctAnswer === "C"}
-                    onChange={() => setQuestion({ ...question, correctAnswer: "C" })}
-                    className="mr-2"
-                  />
-                  Option C
-                </label>
-                <label className="block">
-                  <input
-                    type="radio"
-                    value="D"
-                    checked={question.correctAnswer === "D"}
-                    onChange={() => setQuestion({ ...question, correctAnswer: "D" })}
-                    className="mr-2"
-                  />
-                  Option D
-                </label>
+              <div className="mb-6">
+                <p className="text-gray-700 font-semibold mb-2">Chọn câu trả lời đúng:</p>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="A"
+                      checked={question.correctAnswer === "A"}
+                      onChange={() => setQuestion({ ...question, correctAnswer: "A" })}
+                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-800">Option A</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="B"
+                      checked={question.correctAnswer === "B"}
+                      onChange={() => setQuestion({ ...question, correctAnswer: "B" })}
+                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-800">Option B</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="C"
+                      checked={question.correctAnswer === "C"}
+                      onChange={() => setQuestion({ ...question, correctAnswer: "C" })}
+                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-800">Option C</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="D"
+                      checked={question.correctAnswer === "D"}
+                      onChange={() => setQuestion({ ...question, correctAnswer: "D" })}
+                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-800">Option D</span>
+                  </label>
+                </div>
               </div>
             </div>
           )}
