@@ -31,15 +31,19 @@ namespace DataAccess.Repositories
 
         public async Task AddLessonAsync(Lesson lesson)
         {
+            lesson.SetUtcDates(); // Đảm bảo CreatedAt và UpdatedAt là UTC
             await _context.Lessons.AddAsync(lesson);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateLessonAsync(Lesson lesson)
         {
+            lesson.UpdatedAt = DateTime.UtcNow; // Luôn cập nhật `UpdatedAt` là UTC
+            lesson.SetUtcDates(); // Đảm bảo dữ liệu lưu vào DB là UTC
             _context.Lessons.Update(lesson);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task DeleteLessonAsync(int id)
         {
