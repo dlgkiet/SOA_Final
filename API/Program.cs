@@ -11,12 +11,9 @@ using Microsoft.IdentityModel.Tokens;  // Để sử dụng TokenValidationParam
 using System.Text;
 using Microsoft.Data.SqlClient;  // Để sử dụng Encoding
 using Microsoft.OpenApi.Models;  // Thêm thư viện này để sử dụng OpenApiInfo, OpenApiSecurityScheme, SecuritySchemeType
-
-
-
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>
@@ -32,9 +29,7 @@ builder.Services.AddCors(options =>
 
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-
 
 // Cấu hình kết nối cơ sở dữ liệu với PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -133,6 +128,19 @@ app.UseCors("AllowFrontend");
 // Cấu hình middleware
 app.UseAuthentication(); // Xác thực JWT
 app.UseAuthorization();  // Phân quyền
+
+// Cấu hình để phục vụ file tĩnh từ thư mục wwwroot/uploads
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 
 app.MapControllers();
 

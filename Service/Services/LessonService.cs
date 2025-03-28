@@ -30,11 +30,13 @@ namespace Service.Services
 
         public async Task AddLessonAsync(Lesson lesson)
         {
+            lesson.SetUtcDates();
             await _lessonRepository.AddLessonAsync(lesson);
         }
 
         public async Task UpdateLessonAsync(Lesson lesson)
         {
+            lesson.UpdatedAt = DateTime.UtcNow;
             await _lessonRepository.UpdateLessonAsync(lesson);
         }
 

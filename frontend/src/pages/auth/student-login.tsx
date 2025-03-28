@@ -9,6 +9,7 @@ import { loginStudent } from "@/api/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { useShallow } from "zustand/react/shallow";
 import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 export default function StudentLogin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,9 +44,11 @@ export default function StudentLogin() {
         role: response.role,
       });
 
+      toast.success("Đăng nhập thành công!");
       navigate("/");
     } else {
-      setError("Email hoặc mật khẩu không đúng!");
+      setError("Vui lòng thử lại!");
+      toast.error("Vui lòng thử lại!");
     }
 
     setIsLoading(false);

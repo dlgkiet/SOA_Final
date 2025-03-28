@@ -103,6 +103,26 @@ export const deleteLesson = async (id: number) => {
   }
 };
 
+//Upload file
+export const uploadLessonFile = async (lessonId: number, file: File) => {
+  try {
+    // Tạo FormData để upload file
+    const formData = new FormData();
+    formData.append('files', file);
+
+    // Gọi API upload file
+    const response = await axiosInstance.post(`/lessons/${lessonId}/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to upload file');
+  }
+};
+
 
 //=====================================END-LESSONS================================================
 

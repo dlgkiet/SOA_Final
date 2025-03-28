@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    [Table("lessons")] // Bảng Lesson trong PostgreSQL
+    [Table("lessons")]
     public class Lesson
     {
         [Key]
@@ -15,8 +15,8 @@ namespace Core.Entities
         [Column("content")]
         public string Content { get; set; }
 
-        [Column("file")]
-        public string File { get; set; }
+        [Column("files")]
+        public List<string>? Files { get; set; } = new List<string>();
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -29,5 +29,12 @@ namespace Core.Entities
 
         [Column("course_id")]
         public int CourseId { get; set; }
+
+        // Đảm bảo tất cả giá trị DateTime đều được chuyển thành UTC trước khi lưu
+        public void SetUtcDates()
+        {
+            CreatedAt = DateTime.SpecifyKind(CreatedAt, DateTimeKind.Utc);
+            UpdatedAt = DateTime.SpecifyKind(UpdatedAt, DateTimeKind.Utc);
+        }
     }
 }
