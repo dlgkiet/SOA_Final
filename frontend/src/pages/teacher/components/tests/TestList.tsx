@@ -1,7 +1,8 @@
-import { Plus, Edit, Trash } from 'lucide-react'; // Import icon từ lucide-react
+import { Plus, Edit, Trash } from 'lucide-react'; // Import icons from lucide-react
 import { useState } from "react";
-import { updateTest, deleteTest } from "@/api/teacher"; // Import API updateTest, deleteTest
-import EditTestModal from './EditTestModal';
+import { deleteTest } from "@/api/teacher"; // Import API updateTest, deleteTest
+import EditTestModal from './EditTestModal'; // Import the EditTestModal component
+import CreateQuestionModal from './CreateQuestionModal';
 
 interface Test {
   id: number;
@@ -11,30 +12,35 @@ interface Test {
 
 interface TestListProps {
   tests: Test[];
-  teacherId: number; // Thêm teacherId
-  courseId: number;  // Thêm courseId
-  onUpdateTest: (testId: number, updatedTest: any) => void; // Callback khi bài kiểm tra được cập nhật
-  onDeleteTest: (testId: number) => void; // Callback khi bài kiểm tra bị xóa
+  teacherId: number; // Teacher ID
+  courseId: number;  // Course ID
+  onUpdateTest: (testId: number, updatedTest: any) => void; // Callback when test is updated
+  onDeleteTest: (testId: number) => void; // Callback when test is deleted
 }
 
 const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: TestListProps) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTest, setSelectedTest] = useState<Test | null>(null);
+  const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false);
 
+  // Handle creating a question for a test
   const handleCreateQuestion = (testId: number) => {
     console.log('Tạo câu hỏi cho bài kiểm tra', testId);
+    setIsCreateQuestionModalOpen(true); // Open modal for creating questions
   };
 
+  // Handle editing a test
   const handleEditTest = (testId: number) => {
     const test = tests.find((test) => test.id === testId);
     setSelectedTest(test || null);
-    setIsEditModalOpen(true);
+    setIsEditModalOpen(true); // Open edit modal
   };
 
+  // Handle deleting a test
   const handleDeleteTest = async (testId: number) => {
     try {
       await deleteTest(testId);
-      onDeleteTest(testId); // Truyền testId qua callback để cập nhật danh sách bài kiểm tra
+      onDeleteTest(testId); // Pass the testId to callback to update the test list
     } catch (error: any) {
       console.error("Xóa bài kiểm tra thất bại:", error.message);
     }
@@ -47,15 +53,15 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
         <div className="space-y-4">
           {tests.map((test) => (
             <div key={test.id} className="bg-white p-6 border rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out">
-              {/* Tiêu đề bài kiểm tra */}
+              {/* Test title */}
               <h4 className="text-xl font-semibold mb-2">{test.content}</h4>
 
-              {/* Thời gian hết hạn */}
+              {/* Test deadline */}
               <p className="text-gray-500 text-sm mt-2">
                 Thời gian hết hạn: {new Date(test.deadline).toLocaleString()}
               </p>
 
-              {/* Các nút chức năng: Tạo câu hỏi, Chỉnh sửa, Xóa */}
+              {/* Buttons: Create question, Edit, Delete */}
               <div className="flex gap-4 mt-4 justify-end">
                 <button
                   onClick={() => handleCreateQuestion(test.id)}
@@ -88,6 +94,7 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
         <p className="text-gray-500">Chưa có bài kiểm tra nào cho khóa học này.</p>
       )}
 
+      {/* Edit Test Modal */}
       {selectedTest && (
         <EditTestModal
           isOpen={isEditModalOpen}
@@ -96,6 +103,15 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
           teacherId={teacherId}
           courseId={courseId}
           onUpdateTest={onUpdateTest}
+        />
+      )}
+
+      {/* Create Question Modal */}
+      {isCreateQuestionModalOpen && (
+        <CreateQuestionModal
+          isOpen={isCreateQuestionModalOpen}
+          onClose={() => setIsCreateQuestionModalOpen(false)}
+          testId={selectedTest?.id || 0}
         />
       )}
     </div>
