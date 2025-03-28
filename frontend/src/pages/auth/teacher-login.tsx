@@ -9,6 +9,7 @@ import { loginTeacher } from "@/api/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { useShallow } from "zustand/react/shallow";
 import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 export default function TeacherLogin() {
   const navigate = useNavigate();
@@ -44,8 +45,10 @@ export default function TeacherLogin() {
       });
 
       navigate("/");
+      toast.success("Đăng nhập thành công!");
     } else {
-      setError("Email hoặc mật khẩu không đúng!");
+      setError("Vui lòng thử lại!");
+      toast.error("Vui lòng thử lại!");
     }
 
     setIsLoading(false);

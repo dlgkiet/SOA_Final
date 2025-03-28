@@ -19,6 +19,7 @@ import Navbar from "./navbar";
 import { useAuthStore } from "@/stores/auth-store";
 import { useShallow } from "zustand/react/shallow";
 import { logout } from "@/api/auth";
+import { toast } from "sonner";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Header() {
       resetUserInformation();
       setIsAuthenticated(false);
       navigate("/login");
-      console.log("User logged out");
+      toast.success("Đăng xuất thành công!");
     }
   };
 
