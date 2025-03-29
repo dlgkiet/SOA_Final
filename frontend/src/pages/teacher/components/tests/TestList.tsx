@@ -1,4 +1,4 @@
-import { Plus, Edit, Trash } from 'lucide-react'; // Import icons from lucide-react
+import { Plus, Edit, Trash, Eye } from 'lucide-react'; // Import icons from lucide-react
 import { useState } from "react";
 import { deleteTest } from "@/api/teacher"; // Import API updateTest, deleteTest
 import EditTestModal from './EditTestModal'; // Import the EditTestModal component
@@ -30,8 +30,9 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
     setIsCreateQuestionModalOpen(true); // Mở modal tạo câu hỏi
   };
 
-  console.log(selectedTest)
-
+  const handleViewQuestions = (testId: Number) => {
+    console.log(testId);
+  }
 
   // Handle editing a test
   const handleEditTest = (testId: number) => {
@@ -93,6 +94,13 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
                 >
                   <Trash size={16} />
                   Xóa
+                </button>
+                <button
+                  onClick={() => handleViewQuestions(test.id)}
+                  className="flex items-center gap-2 px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+                >
+                  <Eye size={16} />  {/* Sử dụng Eye icon */}
+                  Xem danh sách câu hỏi
                 </button>
               </div>
             </div>
