@@ -3,6 +3,7 @@ import { useState } from "react";
 import { deleteTest } from "@/api/teacher"; // Import API updateTest, deleteTest
 import EditTestModal from './EditTestModal'; // Import the EditTestModal component
 import CreateQuestionModal from './CreateQuestionModal';
+import ViewQuestionsModal from './ViewQuestionsModal';
 
 interface Test {
   id: number;
@@ -22,6 +23,8 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTest, setSelectedTest] = useState<Test | null>(null);
   const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false);
+  const [isViewQuestionsModalOpen, setIsViewQuestionsModalOpen] = useState(false);
+
 
   // Handle creating a question for a test
   const handleCreateQuestion = (testId: number) => {
@@ -30,9 +33,11 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
     setIsCreateQuestionModalOpen(true); // Mở modal tạo câu hỏi
   };
 
-  const handleViewQuestions = (testId: Number) => {
-    console.log(testId);
-  }
+  // Handle viewing questions for a test
+  const handleViewQuestions = (testId: number) => {
+    setSelectedTest(tests.find((test) => test.id === testId) || null);
+    setIsViewQuestionsModalOpen(true); // Open View Questions Modal
+  };
 
   // Handle editing a test
   const handleEditTest = (testId: number) => {
@@ -130,6 +135,15 @@ const TestList = ({ tests, teacherId, courseId, onUpdateTest, onDeleteTest }: Te
           testId={selectedTest?.id || 0}
           modalTitle={selectedTest?.content}
           onSubmit={handleAddQuestion}  // Đảm bảo hàm này được truyền vào đúng cách
+        />
+      )}
+
+      {/* View Questions Modal */}
+      {isViewQuestionsModalOpen && selectedTest && (
+        <ViewQuestionsModal
+          isOpen={isViewQuestionsModalOpen}
+          onClose={() => setIsViewQuestionsModalOpen(false)}
+          testId={selectedTest.id}
         />
       )}
     </div>

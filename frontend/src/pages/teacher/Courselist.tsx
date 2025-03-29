@@ -6,9 +6,13 @@ import { updateCourse, createCourse, deleteCourse } from '@/api/teacher';  // Im
 import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucide-react
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layouts';
+import { useAuthStore } from '@/stores/auth-store';
 
 const CourseList = () => {
-  const teacherId = 2;
+
+  const { _ui } = useAuthStore();
+
+  const teacherId = _ui?.userId ?? 0;
   const { courses, loading, error, setCourses } = useCourses(teacherId);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
