@@ -19,7 +19,6 @@ interface CreateQuestionModalProps {
 }
 
 const CreateQuestionModal = ({ isOpen, onClose, testId, modalTitle }: CreateQuestionModalProps) => {
-  const [isJsonMode, setIsJsonMode] = useState(false); // Toggle between JSON mode and manual input
   const [question, setQuestion] = useState<Question>({
     content: "",
     optionA: "",
@@ -31,49 +30,31 @@ const CreateQuestionModal = ({ isOpen, onClose, testId, modalTitle }: CreateQues
 
   const { _ui } = useAuthStore();
 
-
-
-  const [jsonInput, setJsonInput] = useState(""); // JSON input for multiple questions
-
   const handleSubmit = async () => {
-    if (isJsonMode) {
-      try {
-        const parsedQuestions = JSON.parse(jsonInput);
-        if (Array.isArray(parsedQuestions)) {
-          // Call API to create multiple questions
-          await createQuestion(parsedQuestions); // Call the API with the parsed questions
-          setJsonInput(""); // Clear the JSON input field
-          onClose(); // Close modal
-        }
-      } catch (error) {
-        alert("Invalid JSON format");
-      }
-    } else {
-      const newQuestion = {
-        testId,  // Add testId
-        teacherId: _ui?.userId,
-        content: question.content,
-        optionA: question.optionA,
-        optionB: question.optionB,
-        optionC: question.optionC,
-        optionD: question.optionD,
-        correctAnswer: question.correctAnswer,
-      };
+    const newQuestion = {
+      testId,  // Add testId
+      teacherId: _ui?.userId,
+      content: question.content,
+      optionA: question.optionA,
+      optionB: question.optionB,
+      optionC: question.optionC,
+      optionD: question.optionD,
+      correctAnswer: question.correctAnswer,
+    };
 
-      try {
-        // Call API to create a single question
-        await createQuestion(newQuestion);
-        setQuestion({
-          content: "",
-          optionA: "",
-          optionB: "",
-          optionC: "",
-          optionD: "",
-          correctAnswer: "",
-        }); // Clear input fields
-      } catch (error) {
-        alert("Error creating question");
-      }
+    try {
+      // Call API to create a single question
+      await createQuestion(newQuestion);
+      setQuestion({
+        content: "",
+        optionA: "",
+        optionB: "",
+        optionC: "",
+        optionD: "",
+        correctAnswer: "",
+      }); // Clear input fields
+    } catch (error) {
+      alert("Error creating question");
     }
   };
 
@@ -83,129 +64,101 @@ const CreateQuestionModal = ({ isOpen, onClose, testId, modalTitle }: CreateQues
         <div className="bg-white p-6 rounded-lg w-full max-w-md">
           <h2 className="text-2xl font-semibold mb-4">{modalTitle || "Tạo câu hỏi mới"}</h2>
 
-          {/* Toggle between modes */}
-          <div className="flex gap-4 mb-4">
-            <button
-              onClick={() => setIsJsonMode(false)}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Nhập câu hỏi
-            </button>
-            <button
-              onClick={() => setIsJsonMode(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-            >
-              Nhập JSON
-            </button>
-          </div>
-
-          {/* JSON Mode: Input multiple questions as JSON */}
-          {isJsonMode ? (
-            <div>
-              <textarea
-                value={jsonInput}
-                onChange={(e) => setJsonInput(e.target.value)}
-                placeholder="Nhập JSON các câu hỏi"
-                className="w-full p-2 border rounded-md mb-4 h-[500px]"
+          {/* Manual Input Mode: Input single question */}
+          <div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Nội dung câu hỏi"
+                value={question.content}
+                onChange={(e) => setQuestion({ ...question, content: e.target.value })}
+                className="w-full p-2 border rounded-md"
               />
             </div>
-          ) : (
-            <div>
-              {/* Manual Input Mode: Input single question */}
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Nội dung câu hỏi"
-                  value={question.content}
-                  onChange={(e) => setQuestion({ ...question, content: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Option A"
-                  value={question.optionA}
-                  onChange={(e) => setQuestion({ ...question, optionA: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Option B"
-                  value={question.optionB}
-                  onChange={(e) => setQuestion({ ...question, optionB: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Option C"
-                  value={question.optionC}
-                  onChange={(e) => setQuestion({ ...question, optionC: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Option D"
-                  value={question.optionD}
-                  onChange={(e) => setQuestion({ ...question, optionD: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Option A"
+                value={question.optionA}
+                onChange={(e) => setQuestion({ ...question, optionA: e.target.value })}
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Option B"
+                value={question.optionB}
+                onChange={(e) => setQuestion({ ...question, optionB: e.target.value })}
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Option C"
+                value={question.optionC}
+                onChange={(e) => setQuestion({ ...question, optionC: e.target.value })}
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Option D"
+                value={question.optionD}
+                onChange={(e) => setQuestion({ ...question, optionD: e.target.value })}
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
 
-              {/* Correct Answer with Radio Buttons */}
-              <div className="mb-6">
-                <p className="text-gray-700 font-semibold mb-2">Chọn câu trả lời đúng:</p>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      value="A"
-                      checked={question.correctAnswer === "A"}
-                      onChange={() => setQuestion({ ...question, correctAnswer: "A" })}
-                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-800">Option A</span>
-                  </label>
-                  <label className="flex items-center space-x-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      value="B"
-                      checked={question.correctAnswer === "B"}
-                      onChange={() => setQuestion({ ...question, correctAnswer: "B" })}
-                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-800">Option B</span>
-                  </label>
-                  <label className="flex items-center space-x-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      value="C"
-                      checked={question.correctAnswer === "C"}
-                      onChange={() => setQuestion({ ...question, correctAnswer: "C" })}
-                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-800">Option C</span>
-                  </label>
-                  <label className="flex items-center space-x-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      value="D"
-                      checked={question.correctAnswer === "D"}
-                      onChange={() => setQuestion({ ...question, correctAnswer: "D" })}
-                      className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-800">Option D</span>
-                  </label>
-                </div>
+            {/* Correct Answer with Radio Buttons */}
+            <div className="mb-6">
+              <p className="text-gray-700 font-semibold mb-2">Chọn câu trả lời đúng:</p>
+              <div className="space-y-2">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="A"
+                    checked={question.correctAnswer === "A"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "A" })}
+                    className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-gray-800">Option A</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="B"
+                    checked={question.correctAnswer === "B"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "B" })}
+                    className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-gray-800">Option B</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="C"
+                    checked={question.correctAnswer === "C"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "C" })}
+                    className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-gray-800">Option C</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="D"
+                    checked={question.correctAnswer === "D"}
+                    onChange={() => setQuestion({ ...question, correctAnswer: "D" })}
+                    className="h-5 w-5 text-blue-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-gray-800">Option D</span>
+                </label>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-2">
