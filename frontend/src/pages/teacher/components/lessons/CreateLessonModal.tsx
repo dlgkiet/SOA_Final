@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createLesson } from "@/api/teacher"; // Đảm bảo bạn đã tạo hàm createLesson trong API
+import { useAuthStore } from "@/stores/auth-store";
 
 interface CreateLessonModalProps {
   isOpen: boolean;
@@ -12,6 +13,9 @@ const CreateLessonModal = ({ isOpen, onClose, courseId, onAddLesson }: CreateLes
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<string>("");
 
+
+  const { _ui } = useAuthStore();
+
   const handleSubmit = async () => {
     if (!content || !file) {
       alert("Vui lòng điền đầy đủ thông tin!");
@@ -21,7 +25,7 @@ const CreateLessonModal = ({ isOpen, onClose, courseId, onAddLesson }: CreateLes
     const lessonData = {
       content,
       file,
-      teacherId: 2,  // Giả sử teacherId là 2
+      teacherId: _ui?.userId,  // Giả sử teacherId là 2
       courseId,
       createdAt: new Date().toISOString(),  // Thời gian tạo hiện tại
       updatedAt: new Date().toISOString(),  // Thời gian cập nhật hiện tại
