@@ -181,3 +181,52 @@ export const deleteTest = async (id: number) => {
 };
 
 //=====================================END - TEST================================================
+
+
+//===================================== QUESTION ================================================
+
+// Tạo câu hỏi mới
+export const createQuestion = async (questionData: any) => {
+  try {
+    const response = await axiosInstance.post('/Question', questionData); // POST request to create a new question
+    return response.data;  // Return the data of the created question
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to create question');
+  }
+};
+
+// Lấy danh sách câu hỏi
+export const fetchQuestions = async (testId: number) => {
+  try {
+    const response = await axiosInstance.get('/Question'); // Fetch all questions
+
+    // Filter questions based on testId
+    const filteredQuestions = response.data.filter((question: any) => question.testId === testId);
+
+    return filteredQuestions;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch questions');
+  }
+};
+
+// Cập nhật câu hỏi
+export const updateQuestion = async (id: number, questionData: any) => {
+  try {
+    const response = await axiosInstance.put(`/Question/${id}`, questionData); // PUT request to update question
+    return response.data;  // Return updated question data
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to update question');
+  }
+};
+
+// Xóa câu hỏi
+export const deleteQuestion = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/Question/${id}`); // DELETE request to delete question
+    return response.data;  // Return response confirming deletion
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to delete question');
+  }
+};
+
+//===================================== END -QUESTION ================================================

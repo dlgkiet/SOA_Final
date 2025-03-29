@@ -1,5 +1,6 @@
-import { useAuthStore } from "@/stores/auth-store";
 import { useState } from "react";
+import { createQuestion } from "@/api/teacher";  // Import createQuestion API
+import { useAuthStore } from "@/stores/auth-store";
 
 interface Question {
   content: string;
@@ -13,12 +14,11 @@ interface Question {
 interface CreateQuestionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (questions: Question[] | any) => void; // Accepts an array of questions or JSON data
-  testId: Number
-  modalTitle?: string; // Title of the modal, defaults to "Tạo câu hỏi mới"
+  testId: Number;
+  modalTitle?: string; // Title of the modal
 }
 
-const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId, modalTitle }: CreateQuestionModalProps) => {
+const CreateQuestionModal = ({ isOpen, onClose, testId, modalTitle }: CreateQuestionModalProps) => {
   const [isJsonMode, setIsJsonMode] = useState(false); // Toggle between JSON mode and manual input
   const [question, setQuestion] = useState<Question>({
     content: "",
@@ -31,19 +31,17 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId, modalTitle }: 
 
   const { _ui } = useAuthStore();
 
-  const teacherId = _ui?.userId;
 
-  console.log("TeacherId", teacherId);
-  console.log("TestId", testId);
 
   const [jsonInput, setJsonInput] = useState(""); // JSON input for multiple questions
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isJsonMode) {
       try {
         const parsedQuestions = JSON.parse(jsonInput);
         if (Array.isArray(parsedQuestions)) {
-          onSubmit(parsedQuestions); // Submit array of questions in JSON format
+          // Call API to create multiple questions
+          await createQuestion(parsedQuestions); // Call the API with the parsed questions
           setJsonInput(""); // Clear the JSON input field
           onClose(); // Close modal
         }
@@ -51,16 +49,31 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId, modalTitle }: 
         alert("Invalid JSON format");
       }
     } else {
-      onSubmit([question]); // Submit a single question
-      // Clear fields for new input and keep the modal open
-      setQuestion({
-        content: "",
-        optionA: "",
-        optionB: "",
-        optionC: "",
-        optionD: "",
-        correctAnswer: "",
-      }); // Clear input fields to continue entering new question
+      const newQuestion = {
+        testId,  // Add testId
+        teacherId: _ui?.userId,
+        content: question.content,
+        optionA: question.optionA,
+        optionB: question.optionB,
+        optionC: question.optionC,
+        optionD: question.optionD,
+        correctAnswer: question.correctAnswer,
+      };
+
+      try {
+        // Call API to create a single question
+        await createQuestion(newQuestion);
+        setQuestion({
+          content: "",
+          optionA: "",
+          optionB: "",
+          optionC: "",
+          optionD: "",
+          correctAnswer: "",
+        }); // Clear input fields
+      } catch (error) {
+        alert("Error creating question");
+      }
     }
   };
 
@@ -68,7 +81,7 @@ const CreateQuestionModal = ({ isOpen, onClose, onSubmit, testId, modalTitle }: 
     isOpen && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded-lg w-full max-w-md">
-          <h2 className="text-2xl font-semibold mb-4">{modalTitle}</h2>
+          <h2 className="text-2xl font-semibold mb-4">{modalTitle || "Tạo câu hỏi mới"}</h2>
 
           {/* Toggle between modes */}
           <div className="flex gap-4 mb-4">
