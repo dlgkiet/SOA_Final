@@ -51,7 +51,7 @@ const CourseList = () => {
       name: updatedData.name,
       description: updatedData.description,
       schedule: updatedData.schedule,
-      teacherId: 2,  // Giả sử teacherId là 2, bạn có thể thay đổi giá trị này tùy theo yêu cầu
+      teacherId,
       studentIds: updatedData.studentIds || [],  // Lấy studentIds từ form nếu có
       createdAt: new Date().toISOString(),  // Giả sử thời gian tạo là thời gian hiện tại
     };
@@ -96,7 +96,7 @@ const CourseList = () => {
         name: courseData.name,
         description: courseData.description,
         schedule: courseData.schedule,
-        teacherId: 2,  // Giả sử teacherId là 2
+        teacherId,  // Giả sử teacherId là 2
         studentIds: courseData.studentIds || [],  // Lấy studentIds từ form nếu có
         createdAt: new Date().toISOString(),  // Thời gian tạo là thời gian hiện tại
       };

@@ -29,14 +29,14 @@ const ViewQuestionsModal = ({ isOpen, onClose, testId }: ViewQuestionsModalProps
   return (
     isOpen && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-lg w-full max-w-md">
+        <div className="bg-white p-6 rounded-lg w-full max-w-3xl h-[80vh] overflow-y-auto">
           <h2 className="text-2xl font-semibold mb-4">Danh sách câu hỏi</h2>
           {questions.length > 0 ? (
             <div>
               <ul>
-                {questions.map((question) => (
+                {questions.map((question, index) => (
                   <li key={question.id} className="mb-4 p-4 border-b">
-                    <p className="font-medium">{question.content}</p>
+                    <p className="font-medium">Câu {index + 1}: {question.content}</p>
                     <div className="mt-2">
                       <p>A: {question.optionA}</p>
                       <p>B: {question.optionB}</p>
