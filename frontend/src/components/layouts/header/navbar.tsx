@@ -6,8 +6,7 @@ import { useAuthStore } from "@/stores/auth-store";
 
 const navLinks = {
   student: [
-    { title: "Khóa học", href: "/courses" },
-    { title: "Lớp học", href: "/classrooms" },
+    { title: "Khóa học", href: "/student/courses" },
     { title: "Bài tập", href: "/assignments" },
     { title: "Lịch học", href: "/schedule" },
   ],
