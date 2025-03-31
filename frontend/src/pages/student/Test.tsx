@@ -71,7 +71,7 @@ console.log(answersArray)
       await submitAnswers(studentId, testId, answersArray);
       toast.success("Nộp bài thành công!");
   
-    //   navigate(`/student/test/result/${testId}`); // ✅ Chuyển hướng sau khi nộp bài
+      navigate(`/student/test/result/${testId}`); // ✅ Chuyển hướng sau khi nộp bài
     } catch (error: any) {
       toast.error("Nộp bài thất bại: " + error.message);
       setIsSubmitting(false); // ✅ Nếu lỗi thì reset lại trạng thái
