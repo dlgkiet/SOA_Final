@@ -30,3 +30,19 @@ export const fetchQuestionsByTestId = async (testId: number) => {
     throw new Error(error.response?.data?.message || "Không thể lấy danh sách câu hỏi");
   }
 };
+
+
+// Gửi câu trả lời của sinh viên lên API
+export const submitAnswers = async (studentId: number, testId: number, selectedAnswers: { questionId: number; selectedAnswer: string }[]) => {
+  try {
+    const response = await axiosInstance.post("/Answer/submit-answer", {
+      studentId,
+      testId,
+      selectedAnswers,
+    });
+
+    return response.data; // Trả về kết quả từ server
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Không thể gửi bài kiểm tra");
+  }
+};

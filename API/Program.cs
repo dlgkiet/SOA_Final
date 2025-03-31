@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.Data.SqlClient;  // Để sử dụng Encoding
 using Microsoft.OpenApi.Models;  // Thêm thư viện này để sử dụng OpenApiInfo, OpenApiSecurityScheme, SecuritySchemeType
 using Microsoft.Extensions.FileProviders;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,10 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+// 🔥 Bật hỗ trợ JSON động
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+NpgsqlConnection.GlobalTypeMapper.EnableDynamicJson();
 
 
 // Add services to the container.

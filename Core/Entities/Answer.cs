@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace Core.Entities
 {
@@ -10,28 +11,25 @@ namespace Core.Entities
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("test_id")]
-        public int TestId { get; set; }
-
-        [Column("question_id")]
-        public int QuestionId { get; set; }
-
         [Column("student_id")]
         public int StudentId { get; set; }
 
-        [Column("selected_answer")]
-        public string SelectedAnswer { get; set; } // Sinh viên chọn A/B/C/D
+        [Column("test_id")]
+        public int TestId { get; set; }
 
-        [Column("is_correct")]
-        public bool IsCorrect { get; set; } // Đúng hoặc sai
+        [Column("selected_answers", TypeName = "jsonb")]
+        public List<AnswerSelection> SelectedAnswers { get; set; } // Mảng đáp án sinh viên chọn
 
         [ForeignKey("TestId")]
         public Test Test { get; set; }
 
-        [ForeignKey("QuestionId")]
-        public Question Question { get; set; }
-
         [ForeignKey("StudentId")]
         public Student Student { get; set; }
+    }
+
+    public class AnswerSelection
+    {
+        public int QuestionId { get; set; }
+        public string Choice { get; set; } // Đáp án đã chọn: "A", "B", "C", "D"
     }
 }

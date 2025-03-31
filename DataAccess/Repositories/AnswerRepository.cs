@@ -57,10 +57,12 @@ namespace DataAccess.Repositories
                 var answer = new Answer
                 {
                     TestId = dto.TestId,
-                    QuestionId = item.QuestionId,
                     StudentId = dto.StudentId,
-                    SelectedAnswer = item.SelectedAnswer,
-                    IsCorrect = question != null && question.CorrectAnswer == item.SelectedAnswer
+                    SelectedAnswers = dto.SelectedAnswers.Select(item => new AnswerSelection
+                    {
+                        QuestionId = item.QuestionId,
+                        Choice = item.SelectedAnswer
+                    }).ToList()
                 };
 
                 _context.Answers.Add(answer);
