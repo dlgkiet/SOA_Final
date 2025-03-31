@@ -73,7 +73,7 @@ const CourseList = () => {
   };
 
   // Hàm xử lý khi tạo khóa học mới
-  const handleCreateCourse = async (id: number, courseData: any) => {
+  const handleCreateCourse = async (_id: number, courseData: any) => {
     // Kiểm tra nếu các trường bắt buộc có giá trị
     const errors: any = {};
     if (!courseData.name) {
