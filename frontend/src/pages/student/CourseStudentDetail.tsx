@@ -4,6 +4,8 @@ import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher"; // AP
 import Layout from "@/components/layouts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+
 
 const CourseStudentDetail = () => {
   const { id } = useParams(); // Lấy ID khóa học từ URL
@@ -12,6 +14,9 @@ const CourseStudentDetail = () => {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  
 
   useEffect(() => {
     const loadCourseData = async () => {
@@ -26,6 +31,8 @@ const CourseStudentDetail = () => {
 
         const testsData = await fetchTests(Number(id));
         setTests(testsData);
+
+        console.log(testsData);
       } catch (err) {
         const errorMessage = "Lỗi tải dữ liệu: " + err.message;
         setError(errorMessage);
@@ -81,25 +88,35 @@ const CourseStudentDetail = () => {
 
         {/* Danh sách bài kiểm tra */}
         <div className="mt-6">
-          <h3 className="text-2xl font-semibold">Bài kiểm tra</h3>
-          {tests.length > 0 ? (
-            <ul className="mt-2">
-              {tests.map((test) => (
-                <li key={test.id} className="p-4 bg-white shadow-md rounded-lg mb-4">
-                  <h4 className="text-lg font-medium">{test.title}</h4>
-                  <button
-                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    onClick={() => window.location.href = `/tests/${test.id}`}
-                  >
-                    Làm bài kiểm tra
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Chưa có bài kiểm tra nào.</p>
-          )}
-        </div>
+      <h3 className="text-2xl font-semibold">Bài kiểm tra</h3>
+      {tests.length > 0 ? (
+        <ul className="mt-2 space-y-4">
+          {tests.map((test) => (
+            <li
+              key={test.id}
+              className="p-4 bg-white shadow-md rounded-lg border border-gray-200"
+            >
+              <h4 className="text-lg font-medium text-gray-900">{test.content}</h4>
+              <p className="text-gray-600">
+                Hạn chót:{" "}
+                <span className="font-semibold">
+                  {new Date(test.deadline).toLocaleString()}
+                </span>
+              </p>
+              <button
+                className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                onClick={() => navigate(`/student/test/${test.id}`)}
+              >
+                Làm bài kiểm tra
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">Chưa có bài kiểm tra nào.</p>
+      )}
+    </div>
+
       </div>
     </Layout>
   );

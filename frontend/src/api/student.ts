@@ -15,3 +15,18 @@ export const fetchCoursesForStudent = async (studentId: number) => {
     throw new Error(error.response?.data?.message || 'Failed to fetch courses for student');
   }
 };
+
+// Lấy tất cả câu hỏi và lọc theo testId
+export const fetchQuestionsByTestId = async (testId: number) => {
+  try {
+    const response = await axiosInstance.get("/Question"); // Lấy toàn bộ câu hỏi
+
+    console.log(response)
+
+    const filteredQuestions = response.data.filter((q: any) => q.testId === testId); // Lọc theo testId
+
+    return filteredQuestions; // Trả về danh sách câu hỏi đã lọc
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Không thể lấy danh sách câu hỏi");
+  }
+};
