@@ -4,6 +4,7 @@ import { fetchQuestionsByTestId, submitAnswers } from "@/api/student";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/stores/auth-store";
 
 const Test = () => {
   const { id } = useParams();
@@ -15,6 +16,8 @@ const Test = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false); // ✅ Thêm state kiểm soát việc nộp bài
 
+
+  const {_ui} = useAuthStore();
 
 
   useEffect(() => {
@@ -46,7 +49,7 @@ const Test = () => {
     if (!id || isSubmitting) return; // ✅ Ngăn nộp bài khi đang xử lý
     setIsSubmitting(true); // ✅ Đánh dấu trạng thái đang nộp bài
   
-    const studentId = 123; // 🔹 Thay bằng ID thực tế
+    const studentId = _ui?.userId; // 🔹 Thay bằng ID thực tế
     const testId = Number(id);
   
     const answersArray = Object.entries(selectedAnswers)
