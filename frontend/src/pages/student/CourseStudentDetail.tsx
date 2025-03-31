@@ -1,41 +1,59 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchCourseById, fetchLessons, fetchTests } from "@/api/teacher"; // API bên student
 import Layout from "@/components/layouts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { fetchCoursesForStudent, fetchLessons } from "@/api/student";
+import { useAuthStore } from "@/stores/auth-store";
 
 const CourseStudentDetail = () => {
   const { id } = useParams(); // Lấy ID khóa học từ URL
-  const [course, setCourse] = useState(null);
-  const [lessons, setLessons] = useState([]);
-  const [tests, setTests] = useState([]);
+  const [course, setCourse] = useState<any>(null);
+  const [lessons, setLessons] = useState<any[]>([]);
+  const [tests, setTests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const {_ui} = useAuthStore();
+  const studentId =_ui?.userId
+  console.log(studentId);
 
   useEffect(() => {
-    const loadCourseData = async () => {
-      if (!id) return;
-
+    const loadCourseDetails = async () => {
       try {
-        const courseData = await fetchCourseById(Number(id));
-        setCourse(courseData);
+        setLoading(true);
+        
+        // Kiểm tra nếu studentId chưa được xác định
+        if (studentId === undefined) {
+          throw new Error("Không tìm thấy ID sinh viên. Vui lòng đăng nhập lại.");
+        }
 
-        const lessonsData = await fetchLessons(Number(id));
-        setLessons(lessonsData);
+        // Lấy danh sách khóa học mà sinh viên đang tham gia
+        const courses = await fetchCoursesForStudent(studentId);
+        
+        // Tìm khóa học theo ID
+        const selectedCourse = courses.find((c: any) => c.id === Number(id));
+        if (!selectedCourse) throw new Error("Khóa học không tồn tại hoặc bạn không được cấp quyền.");
 
-        const testsData = await fetchTests(Number(id));
-        setTests(testsData);
-      } catch (err) {
-        const errorMessage = "Lỗi tải dữ liệu: " + err.message;
-        setError(errorMessage);
-        toast.error(errorMessage);
+        setCourse(selectedCourse);
+
+        // Lấy danh sách bài học
+        const allLessons = await fetchLessons();
+        const courseLessons = allLessons.filter((lesson: any) => lesson.courseId === Number(id));
+        setLessons(courseLessons);
+
+        // TODO: Lấy danh sách bài kiểm tra từ API khi có backend hỗ trợ
+        setTests([]); // Hiện tại chưa có API lấy bài kiểm tra
+
+      } catch (err: any) {
+        setError(err.message);
+        toast.error(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    loadCourseData();
+    loadCourseDetails();
   }, [id]);
 
   if (loading) return <Skeleton className="h-8 w-full" />;
@@ -44,8 +62,8 @@ const CourseStudentDetail = () => {
   return (
     <Layout>
       <div className="container mx-auto p-6">
-        <h2 className="text-3xl font-bold">{course.name}</h2>
-        <p className="text-gray-700 mt-2">{course.description}</p>
+        <h2 className="text-3xl font-bold">{course?.name}</h2>
+        <p className="text-gray-700 mt-2">{course?.description}</p>
 
         {/* Danh sách bài học */}
         <div className="mt-6">
@@ -58,7 +76,7 @@ const CourseStudentDetail = () => {
                   {lesson.files && lesson.files.length > 0 && (
                     <div className="mt-2">
                       <p className="text-blue-600">File đính kèm:</p>
-                      {lesson.files.map((fileUrl, index) => (
+                      {lesson.files.map((fileUrl: string, index: number) => (
                         <a
                           key={index}
                           href={`http://localhost:7051${fileUrl}`}

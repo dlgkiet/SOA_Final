@@ -26,12 +26,8 @@ const navLinks = {
 const Navbar = () => {
   const { _ui } = useAuthStore();
   const role = (_ui?.role as "student" | "teacher" | "admin") || "student";
-  console.log(role);
 
   const navigationLinks = navLinks[role] || [];
-
-  console.log("Role:", role);
-  console.log("Navigation Links:", navigationLinks);
 
   return (
     <ScrollArea className="w-full whitespace-nowrap rounded-md pb-0">

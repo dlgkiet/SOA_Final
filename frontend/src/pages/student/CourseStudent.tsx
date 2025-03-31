@@ -14,9 +14,6 @@ const CourseStudent = () => {
 
   const studentId = _ui?.userId; // ID của sinh viên (bạn có thể thay đổi theo logic của mình)
 
-  console.log(studentId);
-
-
   // Fetch khóa học của sinh viên khi component mount
   useEffect(() => {
     const fetchCourses = async () => {
