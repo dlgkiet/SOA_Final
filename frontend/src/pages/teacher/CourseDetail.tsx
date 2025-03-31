@@ -106,7 +106,6 @@ const CourseDetail = () => {
     setTests((prevTests) => prevTests.filter((test) => test.id !== testId)); // Xóa bài kiểm tra khỏi danh sách
   };
 
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   const handleFileSelect = (
     event: React.ChangeEvent<HTMLInputElement>,
