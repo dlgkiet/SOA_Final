@@ -7,6 +7,7 @@ import { Edit, Trash, Plus } from 'lucide-react'; // Import các icon từ lucid
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layouts';
 import { useAuthStore } from '@/stores/auth-store';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const CourseList = () => {
 
@@ -109,7 +110,29 @@ const CourseList = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <Layout>
+        <div className="container mx-auto p-6">
+          <h2 className="text-2xl font-semibold mb-4">Các Khóa học đang dạy</h2>
+  
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="bg-white p-4 border rounded-lg shadow-md">
+                <Skeleton className="h-6 w-3/4 mb-2" /> {/* Tiêu đề khóa học */}
+                <Skeleton className="h-4 w-full mb-2" /> {/* Mô tả khóa học */}
+                <Skeleton className="h-4 w-1/2 mb-3" /> {/* Lịch học */}
+                <div className="flex gap-2">
+                  <Skeleton className="h-8 w-24 rounded-md" /> {/* Nút Chỉnh sửa */}
+                  <Skeleton className="h-8 w-20 rounded-md" /> {/* Nút Xóa */}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Layout>
+    );
+  }
   if (error) return <div>{error}</div>;
 
   return (
