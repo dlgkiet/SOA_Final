@@ -116,3 +116,23 @@ export const processTestData = async (testId: number) => {
     throw new Error(error.message || "Lỗi khi xử lý dữ liệu bài kiểm tra");
   }
 };
+
+
+export const checkStudentAttempt = async (testId: number, studentId: number) => {
+  try {
+    // Gọi API lấy danh sách tất cả câu trả lời
+    const response = await axiosInstance.get("/Answer");
+
+    // Lọc các câu trả lời của sinh viên cho bài kiểm tra cụ thể
+    const studentAnswers = response.data.filter(
+      (answer: any) => answer.testId === testId && answer.studentId === studentId
+    );
+
+    // Kiểm tra nếu sinh viên có ít nhất một câu trả lời
+    const hasAttempted = studentAnswers.length > 0;
+
+    return { hasAttempted, studentAnswers };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Không thể kiểm tra bài làm của sinh viên");
+  }
+};
