@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchQuestionsByTestId, submitAnswers } from "@/api/student";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const Test = () => {
   const { id } = useParams();
@@ -10,6 +11,11 @@ const Test = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // ✅ Khai báo useNavigate
+
+  const [isSubmitting, setIsSubmitting] = useState(false); // ✅ Thêm state kiểm soát việc nộp bài
+
+
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -37,7 +43,9 @@ const Test = () => {
 
   // ✅ Gửi bài kiểm tra đúng format API yêu cầu
   const handleSubmit = async () => {
-    if (!id) return;
+    if (!id || isSubmitting) return; // ✅ Ngăn nộp bài khi đang xử lý
+    setIsSubmitting(true); // ✅ Đánh dấu trạng thái đang nộp bài
+  
     const studentId = 123; // 🔹 Thay bằng ID thực tế
     const testId = Number(id);
   
@@ -50,14 +58,23 @@ const Test = () => {
   
     if (answersArray.length === 0) {
       toast.error("Vui lòng chọn ít nhất một đáp án!");
+      setIsSubmitting(false); // ✅ Reset lại trạng thái
       return;
     }
   
     try {
+
+console.log(studentId)
+console.log(testId)
+console.log(answersArray)
+
       await submitAnswers(studentId, testId, answersArray);
       toast.success("Nộp bài thành công!");
+  
+    //   navigate(`/student/test/result/${testId}`); // ✅ Chuyển hướng sau khi nộp bài
     } catch (error: any) {
       toast.error("Nộp bài thất bại: " + error.message);
+      setIsSubmitting(false); // ✅ Nếu lỗi thì reset lại trạng thái
     }
   };
   
@@ -98,12 +115,16 @@ const Test = () => {
 
       {/* Nút Nộp Bài */}
       <div className="mt-6">
-        <button
-          onClick={handleSubmit}
-          className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition w-full"
-        >
-          Nộp bài kiểm tra
-        </button>
+      <button
+  onClick={handleSubmit}
+  disabled={isSubmitting} // ✅ Ngăn bấm nhiều lần
+  className={`bg-green-500 text-white px-6 py-3 rounded-lg w-full transition ${
+    isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"
+  }`}
+>
+  {isSubmitting ? "Đang nộp bài..." : "Nộp bài kiểm tra"}
+</button>
+
       </div>
     </div>
   );
