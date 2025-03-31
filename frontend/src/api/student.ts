@@ -80,7 +80,13 @@ export const processTestData = async (testId: number) => {
     let correctCount = 0;
     const processedData = questions.map((question: any) => {
       const studentAnswers = studentAnswersMap[question.id] || [];
-      const isCorrect = studentAnswers.includes(question.correctAnswer);
+
+      // Tách đáp án đúng thành mảng (nếu có nhiều đáp án đúng)
+      const correctAnswersArray = question.correctAnswer.split(",");
+      const isCorrect =
+        studentAnswers.length === correctAnswersArray.length &&
+        studentAnswers.every(ans => correctAnswersArray.includes(ans));
+
       if (isCorrect) correctCount++;
 
       return {
@@ -104,12 +110,9 @@ export const processTestData = async (testId: number) => {
     console.log("Correct Count:", correctCount);
     console.log("Total Questions:", totalQuestions);
     console.log("Calculated Score:", score);
-    
 
     return { processedData, correctCount, totalQuestions, score };
-
   } catch (error: any) {
     throw new Error(error.message || "Lỗi khi xử lý dữ liệu bài kiểm tra");
   }
 };
-
