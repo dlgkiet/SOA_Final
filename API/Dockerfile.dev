@@ -1,0 +1,15 @@
+# Dev: Sử dụng SDK để chạy trực tiếp, không publish
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+WORKDIR /app
+
+# Copy toàn bộ mã nguồn vào container (hoặc mount qua volume)
+COPY . .
+
+WORKDIR /app/API
+
+# Cổng ASP.NET chạy mặc định là 5000 (có thể chỉnh)
+EXPOSE 8080
+
+# Chạy với hot reload
+CMD ["dotnet", "watch", "run", "--urls=http://0.0.0.0:8080"]

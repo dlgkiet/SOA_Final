@@ -21,12 +21,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")  // URL của frontend
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
+        policy.WithOrigins(
+                "http://localhost:5173",   // Vite mặc định
+                "http://localhost:3000",   // Nếu chạy React trên 3000
+                "http://localhost:3001",    // Nếu chạy Docker frontend dev
+                "https://soa-final-1.onrender.com",
+                "https://localhost:5173"
+            )
+            .SetIsOriginAllowed(origin => true) // 🔥 Cần để tránh lỗi CORS khi AllowCredentials
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
+
 
 // 🔥 Bật hỗ trợ JSON động
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

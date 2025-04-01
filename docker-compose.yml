@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    ports:
+      - "5000:8080"
+    networks:
+      - soa-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - soa-network
+
+networks:
+  soa-network:
+    driver: bridge

@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Cài gói trước để cache tốt hơn
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy code sau cùng (để không cache khi code thay đổi)
+COPY . .
+
+# Mở port Vite (mặc định là 5173 hoặc 3000 nếu đã chỉnh)
+EXPOSE 3000
+
+CMD ["npm", "run", "dev", "--", "--host"]
