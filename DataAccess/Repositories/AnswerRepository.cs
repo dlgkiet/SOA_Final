@@ -50,23 +50,20 @@ namespace DataAccess.Repositories
 
         public async Task SubmitAnswersAsync(SubmitAnswerDto dto)
         {
-            foreach (var item in dto.SelectedAnswers)
+            var answer = new Answer
             {
-                var question = await _context.Questions.FindAsync(item.QuestionId);
-
-                var answer = new Answer
+                TestId = dto.TestId,
+                StudentId = dto.StudentId,
+                SelectedAnswers = dto.SelectedAnswers.Select(item => new AnswerSelection
                 {
-                    TestId = dto.TestId,
                     QuestionId = item.QuestionId,
-                    StudentId = dto.StudentId,
-                    SelectedAnswer = item.SelectedAnswer,
-                    IsCorrect = question != null && question.CorrectAnswer == item.SelectedAnswer
-                };
+                    Choice = item.SelectedAnswer
+                }).ToList()
+            };
 
-                _context.Answers.Add(answer);
-            }
-
+            _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
         }
+
     }
 }

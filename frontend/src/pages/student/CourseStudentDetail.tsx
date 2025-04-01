@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useActionData } from "react-router-dom";
+import { fetchCourseById, fetchTests } from "@/api/teacher";
+import { checkStudentAttempt } from "@/api/student";
 import Layout from "@/components/layouts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
@@ -12,11 +14,13 @@ const CourseStudentDetail = () => {
   const [lessons, setLessons] = useState<any[]>([]);
   const [tests, setTests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
+  const [attempts, setAttempts] = useState<{ [key: number]: boolean }>({}); // ✅ Lưu trạng thái đã làm bài
+  const navigate = useNavigate();
 
   const {_ui} = useAuthStore();
-  const studentId =_ui?.userId
-  console.log(studentId);
+
+  const studentId = _ui?.userId; // 🔹 Thay bằng ID sinh viên thực tế
 
   useEffect(() => {
     const loadCourseDetails = async () => {
@@ -42,8 +46,16 @@ const CourseStudentDetail = () => {
         const courseLessons = allLessons.filter((lesson: any) => lesson.courseId === Number(id));
         setLessons(courseLessons);
 
-        // TODO: Lấy danh sách bài kiểm tra từ API khi có backend hỗ trợ
-        setTests([]); // Hiện tại chưa có API lấy bài kiểm tra
+        const testsData = await fetchTests(Number(id));
+        setTests(testsData);
+
+        // 🔹 Kiểm tra xem sinh viên đã làm bài nào
+        const attemptsData: { [key: number]: boolean } = {};
+        for (const test of testsData) {
+          const attemptResult = await checkStudentAttempt(test.id, studentId);
+          attemptsData[test.id] = attemptResult.hasAttempted;
+        }
+        setAttempts(attemptsData);
 
       } catch (err: any) {
         setError(err.message);
@@ -101,21 +113,34 @@ const CourseStudentDetail = () => {
         <div className="mt-6">
           <h3 className="text-2xl font-semibold">Bài kiểm tra</h3>
           {tests.length > 0 ? (
-            <ul className="mt-2">
+            <ul className="mt-2 space-y-4">
               {tests.map((test) => (
-                <li key={test.id} className="p-4 bg-white shadow-md rounded-lg mb-4">
-                  <h4 className="text-lg font-medium">{test.title}</h4>
-                  <button
-                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    onClick={() => window.location.href = `/tests/${test.id}`}
-                  >
-                    Làm bài kiểm tra
-                  </button>
+                <li key={test.id} className="p-4 bg-white shadow-md rounded-lg border border-gray-200">
+                  <h4 className="text-lg font-medium text-gray-900">{test.content}</h4>
+                  <p className="text-gray-600">
+                    Hạn chót: <span className="font-semibold">{new Date(test.deadline).toLocaleString()}</span>
+                  </p>
+
+                  {attempts[test.id] ? (
+                    <button
+                      className="mt-3 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                      onClick={() => navigate(`/student/test/result/${test.id}`)}
+                    >
+                      Xem kết quả
+                    </button>
+                  ) : (
+                    <button
+                      className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                      onClick={() => navigate(`/student/test/${test.id}`)}
+                    >
+                      Làm bài kiểm tra
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
           ) : (
-            <p>Chưa có bài kiểm tra nào.</p>
+            <p className="text-gray-500">Chưa có bài kiểm tra nào.</p>
           )}
         </div>
       </div>
