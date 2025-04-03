@@ -82,7 +82,8 @@ npm run dev
 - *FluentValidation* - Kiểm tra dữ liệu đầu vào
 
 ### 🎨 Frontend:
-- *React 18* - Thư viện UI chính
+- *React 19*
+- *Shadcn* - Thư viện UI chính
 - *TypeScript* - Ngôn ngữ lập trình
 - *TailwindCSS* - Framework UI
 - *Axios* - Thư viện gọi API
