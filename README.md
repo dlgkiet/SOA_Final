@@ -6,6 +6,15 @@ Dự án *SOA Final* là một hệ thống quản lý khóa học trực tuyế
 - **🌐 Frontend:** Được phát triển bằng *React + TypeScript*
 - **🗄 Database:** Sử dụng *PostgreSQL*
 
+## 🏛 Kiến trúc Layered Architecture trong dự án
+Dự án sử dụng kiến trúc *Layered Architecture* với các lớp chính:
+- **🔍 Presentation Layer** (Frontend - React) : Hiển thị giao diện người dùng, gọi API.
+- **⚙️ Service Layer**: Xử lý logic nghiệp vụ, giao tiếp với tầng dữ liệu.
+- **🗄 Data Access Layer**: Quản lý truy cập dữ liệu bằng Entity Framework Core.
+- **📦 Core Layer**: Chứa các thực thể và mô hình dữ liệu chung.
+
+Mỗi lớp có vai trò riêng biệt, giúp cải thiện tính bảo trì và mở rộng của hệ thống.
+
 ## 📂 Cấu trúc thư mục
 ```
 dlgkiet-soa_final/
@@ -27,7 +36,7 @@ dlgkiet-soa_final/
 ### 1️⃣ Cài đặt Backend (.NET Core + PostgreSQL + JWT)
 #### 🛠 Yêu cầu hệ thống
 - *.NET SDK 8.0.10*
-- *PostgreSQL 16+*
+- *PostgreSQL 14+*
 
 #### 🔧 Các bước cài đặt
 Cài đặt thư viện PostgreSQL và JWT Authentication bằng lệnh:
@@ -79,15 +88,6 @@ npm run dev
 - *Axios* - Thư viện gọi API
 - *Zustand* - Quản lý state
 - *React Router* - Quản lý điều hướng
-
-## 🏛 Kiến trúc Layered Architecture trong dự án
-Dự án sử dụng kiến trúc *Layered Architecture* với các lớp chính:
-- **🔍 Presentation Layer** (Frontend - React) : Hiển thị giao diện người dùng, gọi API.
-- **⚙️ Service Layer**: Xử lý logic nghiệp vụ, giao tiếp với tầng dữ liệu.
-- **🗄 Data Access Layer**: Quản lý truy cập dữ liệu bằng Entity Framework Core.
-- **📦 Core Layer**: Chứa các thực thể và mô hình dữ liệu chung.
-
-Mỗi lớp có vai trò riêng biệt, giúp cải thiện tính bảo trì và mở rộng của hệ thống.
 
 ## 🚀 Triển khai (Deployment)
 ### 🖥 Backend:
