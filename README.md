@@ -52,6 +52,7 @@ dlgkiet-soa_final/
 │   └— vite.config.ts
 └— Service/  # Service Layer
 ```
+![image](https://github.com/user-attachments/assets/7184bd4f-3a56-418e-8131-772dd2a6685d)
 
 ## ⚙️ Cài đặt
 
