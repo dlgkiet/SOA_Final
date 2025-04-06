@@ -144,7 +144,7 @@ npm run dev
 
 ## 🔗 Link website test
 
-*[https\://soa-frontend-f4fn.onrender.com](https://soa-final.onrender.com/)*
+*https://soa-final.onrender.com/*
 
 🚨 Dự án vẫn đang trong quá trình phát triển. Nếu bạn có góp ý hoặc phát hiện lỗi, vui lòng liên hệ qua email hoặc tạo issue trên GitHub!
 
