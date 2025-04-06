@@ -13,6 +13,6 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    allowedHosts: ['soa-frontend-f4fn.onrender.com']
+    allowedHosts: ['soa-final.onrender.com']
   }
 })
