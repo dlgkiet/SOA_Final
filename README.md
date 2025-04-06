@@ -8,6 +8,22 @@ Dự án *SOA Final* là một hệ thống quản lý khóa học trực tuyế
 - **🌐 Frontend:** Được phát triển bằng *React + TypeScript*
 - **🗄 Database:** Sử dụng *PostgreSQL*
 
+## 📢 Tài khoản test
+
+### 🎓 Sinh viên:
+
+- Email: `thanhha@example.com`
+- Mật khẩu: `securepassword123`
+
+### 👨‍🏫 Giảng viên:
+
+- Email: `doanthanhlam@gmail.com`
+- Mật khẩu: `thanhlamcode`
+
+## 🔗 Link website test
+
+*https://soa-final.onrender.com/*
+
 ## 🏛 Kiến trúc Layered Architecture trong dự án
 
 Dự án sử dụng kiến trúc *Layered Architecture* với các lớp chính:
@@ -129,22 +145,6 @@ npm run dev
 - *👤 Dương Lâm Gia Kiệt* - [GitHub](https://github.com/dlgkiet)
 - *👤 Đoàn Thanh Lâm* - [GitHub](https://github.com/thanhlamcode)
 - *👤 Đỗ Trọng Hiếu* - [GitHub](https://github.com/Hiu11)
-
-## 📢 Tài khoản test
-
-### 🎓 Sinh viên:
-
-- Email: `thanhha@example.com`
-- Mật khẩu: `securepassword123`
-
-### 👨‍🏫 Giảng viên:
-
-- Email: `doanthanhlam@gmail.com`
-- Mật khẩu: `thanhlamcode`
-
-## 🔗 Link website test
-
-*https://soa-final.onrender.com/*
 
 🚨 Dự án vẫn đang trong quá trình phát triển. Nếu bạn có góp ý hoặc phát hiện lỗi, vui lòng liên hệ qua email hoặc tạo issue trên GitHub!
 
