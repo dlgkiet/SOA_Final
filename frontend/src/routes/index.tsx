@@ -13,6 +13,7 @@ import CourseStudent from "@/pages/student/CourseStudent";
 import CourseStudentDetail from "@/pages/student/CourseStudentDetail";
 import Test from "@/pages/student/Test";
 import TestResult from "@/pages/student/TestResult";
+import Profile from "@/pages/general/profile";
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   const location = useLocation();
@@ -35,6 +36,10 @@ const routes = [
   {
     path: "/login",
     element: <Login />
+  },
+  {
+    path: "/profile",
+    element: <Profile />
   },
   {
     path: "/student-login",

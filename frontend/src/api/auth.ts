@@ -71,3 +71,28 @@ export const logout = async () => {
     return false;
   }
 };
+
+// Cập nhật thông tin cá nhân
+export const updatePersonalInfo = async (
+  id: number,
+  data: {
+    name: string;
+    birthday: string;
+    email: string;
+  }
+) => {
+  const res = await axiosInstance.put(`/user/update/personal-info/${id}`, data);
+  return res.data;
+};
+
+// Cập nhật mật khẩu
+export const updatePassword = async (id: number, newPassword: string) => {
+  const res = await axiosInstance.put(
+    `/user/update/password/${id}`,
+    newPassword,
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+  return res.data;
+};

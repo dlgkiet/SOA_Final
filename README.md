@@ -8,6 +8,22 @@ Dự án *SOA Final* là một hệ thống quản lý khóa học trực tuyế
 - **🌐 Frontend:** Được phát triển bằng *React + TypeScript*
 - **🗄 Database:** Sử dụng *PostgreSQL*
 
+## 📢 Tài khoản test
+
+### 🎓 Sinh viên:
+
+- Email: `thanhha@example.com`
+- Mật khẩu: `securepassword123`
+
+### 👨‍🏫 Giảng viên:
+
+- Email: `doanthanhlam@gmail.com`
+- Mật khẩu: `thanhlamcode`
+
+## 🔗 Link website test
+
+*https://soa-final.onrender.com/*
+
 ## 🏛 Kiến trúc Layered Architecture trong dự án
 
 Dự án sử dụng kiến trúc *Layered Architecture* với các lớp chính:
@@ -18,6 +34,10 @@ Dự án sử dụng kiến trúc *Layered Architecture* với các lớp chính
 - **📦 Core Layer**: Chứa các thực thể và mô hình dữ liệu chung.
 
 Mỗi lớp có vai trò riêng biệt, giúp cải thiện tính bảo trì và mở rộng của hệ thống.
+
+**Minh họa Layered Architecture**
+
+![image](https://github.com/user-attachments/assets/7184bd4f-3a56-418e-8131-772dd2a6685d)
 
 ## 📂 Cấu trúc thư mục
 
@@ -129,22 +149,6 @@ npm run dev
 - *👤 Dương Lâm Gia Kiệt* - [GitHub](https://github.com/dlgkiet)
 - *👤 Đoàn Thanh Lâm* - [GitHub](https://github.com/thanhlamcode)
 - *👤 Đỗ Trọng Hiếu* - [GitHub](https://github.com/Hiu11)
-
-## 📢 Tài khoản test
-
-### 🎓 Sinh viên:
-
-- Email: `thanhha@example.com`
-- Mật khẩu: `securepassword123`
-
-### 👨‍🏫 Giảng viên:
-
-- Email: `doanthanhlam@gmail.com`
-- Mật khẩu: `thanhlamcode`
-
-## 🔗 Link website test
-
-*https\://soa-frontend-f4fn.onrender.com*
 
 🚨 Dự án vẫn đang trong quá trình phát triển. Nếu bạn có góp ý hoặc phát hiện lỗi, vui lòng liên hệ qua email hoặc tạo issue trên GitHub!
 

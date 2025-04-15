@@ -99,6 +99,7 @@ namespace API.Controllers
         }
 
         // Cập nhật thông tin cá nhân (không bao gồm password)
+        // Cập nhật thông tin cá nhân (không bao gồm password)
         [HttpPut("update/personal-info/{id}")]
         public async Task<IActionResult> UpdatePersonalInfo(int id, [FromBody] UpdatePersonalInfoDto dto)
         {
@@ -110,7 +111,21 @@ namespace API.Controllers
             var result = await _userService.UpdatePersonalInfoAsync(id, dto.Name, dto.Birthday, dto.Email, dto.ClassId);
             if (result)
             {
-                return Ok("Personal info updated successfully");
+                // Thử lấy user với vai trò Teacher
+                var teacher = await _userService.GetTeacherByIdAsync(id);
+                if (teacher != null)
+                {
+                    return Ok(teacher);
+                }
+
+                // Nếu không phải Teacher, thử với Student
+                var student = await _userService.GetStudentByIdAsync(id);
+                if (student != null)
+                {
+                    return Ok(student);
+                }
+
+                return NotFound($"User with ID {id} not found after update");
             }
             return NotFound($"User with ID {id} not found");
         }
