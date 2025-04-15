@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -7,14 +6,9 @@ import { useAuthStore } from "@/stores/auth-store";
 const navLinks = {
   student: [
     { title: "Khóa học", href: "/student/courses" },
-    { title: "Bài tập", href: "/assignments" },
-    { title: "Lịch học", href: "/schedule" },
+    { title: "Bài kiểm tra", href: "/assignments" },
   ],
-  teacher: [
-    { title: "Quản lý khóa học", href: "/teacher/courses" },
-    { title: "Chấm bài", href: "/grading" },
-    { title: "Thống kê", href: "/statistics" },
-  ],
+  teacher: [{ title: "Quản lý khóa học", href: "/teacher/courses" }],
   admin: [
     { title: "Quản lý người dùng", href: "/manage-users" },
     { title: "Cấu hình hệ thống", href: "/settings" },

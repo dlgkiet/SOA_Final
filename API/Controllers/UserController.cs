@@ -110,7 +110,9 @@ namespace API.Controllers
             var result = await _userService.UpdatePersonalInfoAsync(id, dto.Name, dto.Birthday, dto.Email, dto.ClassId);
             if (result)
             {
-                return Ok("Personal info updated successfully");
+                // Lấy thông tin người dùng sau khi cập nhật
+                var updatedUser = await _userService.GetUserByIdAsync(id); // Tạo method này nếu chưa có
+                return Ok(updatedUser); // Trả về người dùng đã cập nhật thay vì message
             }
             return NotFound($"User with ID {id} not found");
         }
