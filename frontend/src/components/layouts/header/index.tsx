@@ -79,8 +79,13 @@ export default function Header() {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="mt-2 w-48 shadow-lg rounded-md bg-white">
-              <DropdownMenuItem className="flex items-center gap-2 p-2 hover:bg-gray-100">
-                <User className="w-4 h-4" /> Profile
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 p-2 hover:bg-gray-100 w-full"
+                >
+                  <User className="w-4 h-4" /> Profile
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-2 p-2 hover:bg-gray-100">
                 <Settings className="w-4 h-4" /> Settings
@@ -100,4 +105,3 @@ export default function Header() {
     </header>
   );
 }
-
